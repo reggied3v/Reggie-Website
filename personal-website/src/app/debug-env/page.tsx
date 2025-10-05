@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase-browser'
 import { Button } from '@/components/ui/button'
 
 export default function DebugEnvPage() {
@@ -16,6 +16,7 @@ export default function DebugEnvPage() {
 
     try {
       console.log('Testing Supabase connection...')
+      const supabase = createClient()
 
       // Test 1: Simple health check
       const { data, error } = await supabase.auth.getSession()
