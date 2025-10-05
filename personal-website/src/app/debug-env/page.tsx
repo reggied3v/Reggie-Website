@@ -15,27 +15,16 @@ export default function DebugEnvPage() {
     setTestResult('Testing...')
 
     try {
-      // Test 1: Basic fetch
-      console.log('Test 1: Basic fetch to google.com')
-      const basicResponse = await fetch('https://www.google.com', { method: 'HEAD' })
-      console.log('Basic fetch worked! Status:', basicResponse.status)
-
-      // Test 2: Fetch with headers
-      console.log('Test 2: Fetch with custom headers')
-      const headersResponse = await fetch('https://www.google.com', {
-        method: 'HEAD',
-        headers: { 'X-Test': 'value' }
-      })
-      console.log('Headers fetch worked! Status:', headersResponse.status)
-
-      // Test 3: Supabase URL
+      // Test Supabase health endpoint
       const directUrl = `${url}/auth/v1/health`
-      console.log('Test 3: Fetch to Supabase health endpoint:', directUrl)
+      console.log('Testing Supabase health endpoint:', directUrl)
+      console.log('With apikey header length:', key?.length)
 
       const supabaseResponse = await fetch(directUrl, {
         method: 'GET',
         headers: {
-          'apikey': key || ''
+          'apikey': key || '',
+          'Content-Type': 'application/json'
         }
       })
 
@@ -43,7 +32,7 @@ export default function DebugEnvPage() {
       const supabaseData = await supabaseResponse.text()
       console.log('Supabase response:', supabaseData)
 
-      setTestResult(`✅ All tests passed! Supabase status: ${supabaseResponse.status}`)
+      setTestResult(`✅ Supabase fetch worked! Status: ${supabaseResponse.status}`)
     } catch (err) {
       setTestResult(`❌ Exception: ${err instanceof Error ? err.message : String(err)}`)
       console.error('Test exception:', err)
