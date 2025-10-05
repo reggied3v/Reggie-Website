@@ -12,5 +12,12 @@ export function createClient() {
     keyType: typeof key
   })
 
-  return createBrowserClient(url, key)
+  return createBrowserClient(url, key, {
+    auth: {
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      persistSession: true,
+      storage: typeof window !== 'undefined' ? window.localStorage : undefined
+    }
+  })
 }
