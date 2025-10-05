@@ -1,5 +1,4 @@
 import { getUser } from '@/lib/supabase-server'
-import { redirect } from 'next/navigation'
 import { AdminNav } from '@/components/admin/admin-nav'
 
 export default async function AdminLayout({
@@ -9,8 +8,9 @@ export default async function AdminLayout({
 }) {
   const user = await getUser()
 
+  // If no user, just render children (login page will handle this)
   if (!user) {
-    redirect('/admin/login')
+    return <>{children}</>
   }
 
   return (
