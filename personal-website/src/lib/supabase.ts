@@ -1,18 +1,29 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+let supabaseInstance: SupabaseClient | null = null
 
-console.log('Supabase Config Check:')
-console.log('URL present:', !!supabaseUrl)
-console.log('URL value:', supabaseUrl)
-console.log('Key present:', !!supabaseAnonKey)
-console.log('Key length:', supabaseAnonKey?.length || 0)
+export function getSupabaseClient() {
+  if (supabaseInstance) {
+    return supabaseInstance
+  }
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    `Missing Supabase environment variables: ${!supabaseUrl ? 'NEXT_PUBLIC_SUPABASE_URL ' : ''}${!supabaseAnonKey ? 'NEXT_PUBLIC_SUPABASE_ANON_KEY' : ''}`
-  )
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  console.log('Creating Supabase client...')
+  console.log('URL:', supabaseUrl)
+  console.log('URL length:', supabaseUrl?.length || 0)
+  console.log('Key length:', supabaseAnonKey?.length || 0)
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error(
+      `Missing Supabase environment variables: ${!supabaseUrl ? 'NEXT_PUBLIC_SUPABASE_URL ' : ''}${!supabaseAnonKey ? 'NEXT_PUBLIC_SUPABASE_ANON_KEY' : ''}`
+    )
+  }
+
+  supabaseInstance = createClient(supabaseUrl, supabaseAnonKey)
+  return supabaseInstance
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Backward compatibility
+export const supabase = getSupabaseClient()
