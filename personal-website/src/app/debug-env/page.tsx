@@ -42,10 +42,14 @@ export default function DebugEnvPage() {
         console.error('Content-Type only fetch failed:', e)
       }
 
-      // Test with apikey
-      console.log('Test 3: Fetch with apikey')
+      // Test with apikey - try sanitized version
+      console.log('Test 3: Fetch with sanitized apikey')
+      const sanitizedKey = key?.trim().replace(/\s/g, '') || ''
+      console.log('Sanitized key length:', sanitizedKey.length)
+      console.log('Sanitized key first 20:', sanitizedKey.substring(0, 20))
+
       const response3 = await fetch(directUrl, {
-        headers: { 'apikey': key || '' }
+        headers: { 'apikey': sanitizedKey }
       })
       console.log('Apikey fetch worked! Status:', response3.status)
 
