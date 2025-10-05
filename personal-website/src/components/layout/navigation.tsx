@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, Moon, Sun } from "lucide-react"
+import { Menu, X, Moon, Sun, Shield } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -87,11 +87,17 @@ export function Navigation() {
                   </Link>
                 </motion.div>
               ))}
+              <Link href="/admin/login">
+                <Button variant="ghost" size="sm" className="ml-2">
+                  <Shield className="h-4 w-4 mr-2" />
+                  Admin
+                </Button>
+              </Link>
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={toggleTheme}
-                className="ml-4"
+                className="ml-2"
               >
                 {isDarkMode ? (
                   <Sun className="h-5 w-5" />
@@ -156,6 +162,20 @@ export function Navigation() {
                     </Link>
                   </motion.div>
                 ))}
+                <motion.div
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Link
+                    href="/admin/login"
+                    className="flex items-center px-3 py-2 text-foreground hover:text-accent smooth-transition font-medium rounded-md"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Shield className="h-4 w-4 mr-2" />
+                    Admin
+                  </Link>
+                </motion.div>
               </div>
             </motion.div>
           )}
