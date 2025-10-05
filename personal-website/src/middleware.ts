@@ -30,7 +30,18 @@ export async function middleware(request: NextRequest) {
   // Refresh session if expired
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Protect admin routes
+  // Allow login page without authentication
+  if (request.nextUrl.pathname === '/admin/login') {
+    // Redirect to dashboard if already logged in
+    if (user) {
+      const redirectUrl = request.nextUrl.clone()
+      redirectUrl.pathname = '/admin'
+      return NextResponse.redirect(redirectUrl)
+    }
+    return supabaseResponse
+  }
+
+  // Protect all other admin routes
   if (request.nextUrl.pathname.startsWith('/admin')) {
     if (!user) {
       // Redirect to login if not authenticated
@@ -39,13 +50,6 @@ export async function middleware(request: NextRequest) {
       redirectUrl.searchParams.set('redirectTo', request.nextUrl.pathname)
       return NextResponse.redirect(redirectUrl)
     }
-  }
-
-  // Redirect to dashboard if already logged in and trying to access login page
-  if (request.nextUrl.pathname === '/admin/login' && user) {
-    const redirectUrl = request.nextUrl.clone()
-    redirectUrl.pathname = '/admin'
-    return NextResponse.redirect(redirectUrl)
   }
 
   return supabaseResponse
