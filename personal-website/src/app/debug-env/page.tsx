@@ -15,24 +15,41 @@ export default function DebugEnvPage() {
     setTestResult('Testing...')
 
     try {
-      // Test Supabase health endpoint
       const directUrl = `${url}/auth/v1/health`
       console.log('Testing Supabase health endpoint:', directUrl)
-      console.log('With apikey header length:', key?.length)
+      console.log('URL type:', typeof url)
+      console.log('Key type:', typeof key)
+      console.log('Key first 20 chars:', key?.substring(0, 20))
+      console.log('Key last 10 chars:', key?.substring(key.length - 10))
 
-      const supabaseResponse = await fetch(directUrl, {
-        method: 'GET',
-        headers: {
-          'apikey': key || '',
-          'Content-Type': 'application/json'
-        }
+      // Test without any headers first
+      console.log('Test 1: Fetch without headers')
+      try {
+        const response1 = await fetch(directUrl)
+        console.log('No headers fetch worked! Status:', response1.status)
+      } catch (e) {
+        console.error('No headers fetch failed:', e)
+      }
+
+      // Test with just Content-Type
+      console.log('Test 2: Fetch with Content-Type only')
+      try {
+        const response2 = await fetch(directUrl, {
+          headers: { 'Content-Type': 'application/json' }
+        })
+        console.log('Content-Type only fetch worked! Status:', response2.status)
+      } catch (e) {
+        console.error('Content-Type only fetch failed:', e)
+      }
+
+      // Test with apikey
+      console.log('Test 3: Fetch with apikey')
+      const response3 = await fetch(directUrl, {
+        headers: { 'apikey': key || '' }
       })
+      console.log('Apikey fetch worked! Status:', response3.status)
 
-      console.log('Supabase fetch response status:', supabaseResponse.status)
-      const supabaseData = await supabaseResponse.text()
-      console.log('Supabase response:', supabaseData)
-
-      setTestResult(`✅ Supabase fetch worked! Status: ${supabaseResponse.status}`)
+      setTestResult(`✅ All fetch tests passed!`)
     } catch (err) {
       setTestResult(`❌ Exception: ${err instanceof Error ? err.message : String(err)}`)
       console.error('Test exception:', err)
