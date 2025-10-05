@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Plus, Edit2, Trash2, Eye, EyeOff } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase-browser'
 import { useRouter } from 'next/navigation'
 
 interface Podcast {
@@ -41,7 +41,8 @@ export function PodcastsManager({ initialPodcasts }: PodcastsManagerProps) {
 
     if (editingPodcast) {
       // Update existing
-      const { error } = await supabase
+      const supabase = createClient()
+    const { error } = await supabase
         .from('podcasts')
         .update(formData)
         .eq('id', editingPodcast.id)
@@ -53,6 +54,7 @@ export function PodcastsManager({ initialPodcasts }: PodcastsManagerProps) {
       }
     } else {
       // Create new
+      const supabase = createClient()
       const { data, error } = await supabase
         .from('podcasts')
         .insert([{ ...formData, display_order: podcasts.length }])
@@ -92,6 +94,7 @@ export function PodcastsManager({ initialPodcasts }: PodcastsManagerProps) {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this podcast?')) return
 
+    const supabase = createClient()
     const { error } = await supabase
       .from('podcasts')
       .delete()
@@ -104,6 +107,7 @@ export function PodcastsManager({ initialPodcasts }: PodcastsManagerProps) {
   }
 
   const toggleFeatured = async (id: string, currentStatus: boolean) => {
+    const supabase = createClient()
     const { error } = await supabase
       .from('podcasts')
       .update({ is_featured: !currentStatus })

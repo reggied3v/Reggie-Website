@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { LogOut, LayoutDashboard, Mail, FileText, BarChart3, Settings, Headphones, BookOpen } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase-browser'
 import { useRouter } from 'next/navigation'
 import type { User } from '@supabase/supabase-js'
 
@@ -27,6 +27,7 @@ export function AdminNav({ user }: AdminNavProps) {
   const router = useRouter()
 
   const handleLogout = async () => {
+    const supabase = createClient()
     await supabase.auth.signOut()
     router.push('/admin/login')
     router.refresh()

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Mail, MailOpen, Trash2, Download } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase-browser'
 import { useRouter } from 'next/navigation'
 
 interface Contact {
@@ -34,6 +34,7 @@ export function ContactsList({ initialContacts }: ContactsListProps) {
   })
 
   const handleMarkAsRead = async (contactId: string, isRead: boolean) => {
+    const supabase = createClient()
     const { error } = await supabase
       .from('contacts')
       .update({ is_read: !isRead })
@@ -53,6 +54,7 @@ export function ContactsList({ initialContacts }: ContactsListProps) {
   const handleDelete = async (contactId: string) => {
     if (!confirm('Are you sure you want to delete this contact?')) return
 
+    const supabase = createClient()
     const { error } = await supabase
       .from('contacts')
       .delete()

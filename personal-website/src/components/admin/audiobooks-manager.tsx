@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Plus, Edit2, Trash2, Eye, EyeOff } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase-browser'
 import { useRouter } from 'next/navigation'
 
 interface Audiobook {
@@ -40,6 +40,7 @@ export function AudiobooksManager({ initialAudiobooks }: AudiobooksManagerProps)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const supabase = createClient()
 
     if (editingAudiobook) {
       // Update existing
@@ -95,6 +96,7 @@ export function AudiobooksManager({ initialAudiobooks }: AudiobooksManagerProps)
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this audiobook?')) return
+    const supabase = createClient()
 
     const { error } = await supabase
       .from('audiobooks')
@@ -108,6 +110,8 @@ export function AudiobooksManager({ initialAudiobooks }: AudiobooksManagerProps)
   }
 
   const toggleFeatured = async (id: string, currentStatus: boolean) => {
+    const supabase = createClient()
+
     const { error } = await supabase
       .from('audiobooks')
       .update({ is_featured: !currentStatus })
