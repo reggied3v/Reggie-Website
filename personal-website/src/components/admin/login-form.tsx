@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Lock, Mail } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase-browser'
 
 export function LoginForm() {
   const router = useRouter()
@@ -24,6 +24,7 @@ export function LoginForm() {
 
     try {
       console.log('Attempting login with email:', email)
+      const supabase = createClient()
 
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email.trim(),
