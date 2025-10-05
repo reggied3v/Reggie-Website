@@ -23,18 +23,25 @@ export function LoginForm() {
     setError('')
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      console.log('Attempting login with email:', email)
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password: password,
       })
 
+      console.log('Login response:', { data, error })
+
       if (error) {
+        console.error('Login error:', error)
         throw error
       }
 
+      console.log('Login successful, redirecting to:', redirectTo)
       router.push(redirectTo)
       router.refresh()
     } catch (err) {
+      console.error('Login exception:', err)
       setError(err instanceof Error ? err.message : 'Invalid login credentials')
     } finally {
       setIsLoading(false)
