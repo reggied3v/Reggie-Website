@@ -40,8 +40,8 @@ export function LoginForm() {
         console.error('Login error details:', {
           name: error.name,
           message: error.message,
-          status: (error as any).status,
-          __isAuthError: (error as any).__isAuthError
+          status: 'status' in error ? (error as { status?: number }).status : undefined,
+          __isAuthError: '__isAuthError' in error ? (error as { __isAuthError?: boolean }).__isAuthError : undefined
         })
         throw error
       }
