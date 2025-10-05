@@ -78,7 +78,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
           >
-            Passionate about creating innovative solutions and building amazing applications that make a difference in people's lives.
+            Passionate about creating innovative solutions and building amazing applications that make a difference in people&apos;s lives.
           </motion.p>
 
           <motion.div

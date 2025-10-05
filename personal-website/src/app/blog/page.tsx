@@ -100,7 +100,7 @@ export default function BlogPage() {
             <div className="mb-16">
               <h2 className="text-2xl font-bold text-foreground mb-8">Featured Posts</h2>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {featuredPosts.map((post, index) => (
+                {featuredPosts.map((post) => (
                   <Card key={post.id} className="glass hover:shadow-xl smooth-transition group overflow-hidden">
                     <div className="aspect-video bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center">
                       <span className="text-accent/60 text-sm">Featured Post</span>

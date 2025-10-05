@@ -46,7 +46,7 @@ export function AboutSection() {
             About Me
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            I'm a passionate developer with a love for creating innovative solutions.
+            I&apos;m a passionate developer with a love for creating innovative solutions.
             With expertise across the full stack, I enjoy turning complex problems
             into simple, elegant designs that deliver exceptional user experiences.
           </p>
@@ -110,12 +110,12 @@ export function AboutSection() {
                 and continuous learning.
               </p>
               <p className="text-muted-foreground mb-4">
-                When I'm not coding, you can find me exploring new technologies, contributing to open-source
-                projects, or sharing knowledge with the developer community. I'm always excited to tackle
+                When I&apos;m not coding, you can find me exploring new technologies, contributing to open-source
+                projects, or sharing knowledge with the developer community. I&apos;m always excited to tackle
                 new challenges and collaborate on meaningful projects.
               </p>
               <p className="text-muted-foreground">
-                Let's build something amazing together!
+                Let&apos;s build something amazing together!
               </p>
             </CardContent>
           </Card>

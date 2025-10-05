@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { Mail, MapPin, Phone, Github, Linkedin, Twitter } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { ContactForm } from "@/components/contact-form"
 
 const socialLinks = [
   {
@@ -59,11 +60,11 @@ export function ContactSection() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-bold text-foreground mb-6">
-            Let's Work Together
+            Let&apos;s Work Together
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            I'm always excited to collaborate on interesting projects and explore new opportunities.
-            Feel free to reach out if you'd like to discuss a project or just say hello!
+            I&apos;m always excited to collaborate on interesting projects and explore new opportunities.
+            Feel free to reach out if you&apos;d like to discuss a project or just say hello!
           </p>
         </motion.div>
 
@@ -145,70 +146,11 @@ export function ContactSection() {
               <CardHeader>
                 <CardTitle className="text-2xl">Send a Message</CardTitle>
                 <CardDescription>
-                  I'll get back to you as soon as possible.
+                  I&apos;ll get back to you as soon as possible.
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form className="space-y-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
-                        Name
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        className="w-full px-4 py-3 rounded-lg border border-border bg-input text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-accent focus:border-accent smooth-transition"
-                        placeholder="Your name"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        className="w-full px-4 py-3 rounded-lg border border-border bg-input text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-accent focus:border-accent smooth-transition"
-                        placeholder="your.email@example.com"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label htmlFor="subject" className="block text-sm font-medium text-foreground mb-2">
-                      Subject
-                    </label>
-                    <input
-                      type="text"
-                      id="subject"
-                      name="subject"
-                      className="w-full px-4 py-3 rounded-lg border border-border bg-input text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-accent focus:border-accent smooth-transition"
-                      placeholder="What's this about?"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
-                      Message
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      rows={6}
-                      className="w-full px-4 py-3 rounded-lg border border-border bg-input text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-accent focus:border-accent smooth-transition resize-none"
-                      placeholder="Tell me about your project or just say hello!"
-                      required
-                    />
-                  </div>
-                  <Button type="submit" size="lg" className="w-full">
-                    <Mail className="w-5 h-5 mr-2" />
-                    Send Message
-                  </Button>
-                </form>
+                <ContactForm />
               </CardContent>
             </Card>
           </motion.div>
@@ -229,7 +171,7 @@ export function ContactSection() {
               </h3>
               <p className="text-muted-foreground mb-6">
                 Whether you have a specific project in mind or just want to explore possibilities,
-                I'd love to hear from you. Let's create something amazing together!
+                I&apos;d love to hear from you. Let&apos;s create something amazing together!
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" asChild>
