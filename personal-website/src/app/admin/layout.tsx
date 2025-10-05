@@ -16,11 +16,10 @@ export default async function AdminLayout({
     return <>{children}</>
   }
 
-  console.log('Admin Layout - Rendering with AdminNav')
   return (
     <div className="min-h-screen bg-background">
-      <div style={{ backgroundColor: 'red', color: 'white', padding: '10px' }}>
-        ADMIN LAYOUT IS RENDERING - User: {user.email}
+      <div style={{ backgroundColor: 'red', color: 'white', padding: '20px', fontSize: '18px', textAlign: 'center' }}>
+        🔴 ADMIN LAYOUT TEST - Email: {user.email}
       </div>
       <AdminNav user={user} />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
