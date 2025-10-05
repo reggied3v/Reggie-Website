@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LogOut, LayoutDashboard, Mail, FileText, BarChart3, Settings } from 'lucide-react'
+import { LogOut, LayoutDashboard, Mail, FileText, BarChart3, Settings, Headphones, BookOpen } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -16,6 +16,8 @@ const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/contacts', label: 'Contacts', icon: Mail },
   { href: '/admin/blog', label: 'Blog Posts', icon: FileText },
+  { href: '/admin/podcasts', label: 'Podcasts', icon: Headphones },
+  { href: '/admin/audiobooks', label: 'Audiobooks', icon: BookOpen },
   { href: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
   { href: '/admin/settings', label: 'Settings', icon: Settings },
 ]

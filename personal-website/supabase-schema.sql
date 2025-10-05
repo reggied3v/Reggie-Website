@@ -8,6 +8,8 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- =============================================
 -- DROP EXISTING TABLES (if they exist)
 -- =============================================
+DROP TABLE IF EXISTS podcasts CASCADE;
+DROP TABLE IF EXISTS audiobooks CASCADE;
 DROP TABLE IF EXISTS analytics CASCADE;
 DROP TABLE IF EXISTS newsletter_subscribers CASCADE;
 DROP TABLE IF EXISTS blog_posts CASCADE;
@@ -102,6 +104,49 @@ CREATE INDEX idx_newsletter_email ON newsletter_subscribers(email);
 CREATE INDEX idx_newsletter_active ON newsletter_subscribers(is_active);
 
 -- =============================================
+-- PODCASTS TABLE
+-- Store recent podcasts listened to
+-- =============================================
+CREATE TABLE podcasts (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  title TEXT NOT NULL,
+  host TEXT NOT NULL,
+  description TEXT,
+  cover_image_url TEXT NOT NULL,
+  spotify_url TEXT NOT NULL,
+  is_featured BOOLEAN DEFAULT TRUE,
+  display_order INTEGER DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Indexes for podcasts
+CREATE INDEX idx_podcasts_featured ON podcasts(is_featured, display_order);
+CREATE INDEX idx_podcasts_order ON podcasts(display_order);
+
+-- =============================================
+-- AUDIOBOOKS TABLE
+-- Store recent audiobooks listened to
+-- =============================================
+CREATE TABLE audiobooks (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  title TEXT NOT NULL,
+  author TEXT NOT NULL,
+  description TEXT,
+  cover_image_url TEXT NOT NULL,
+  spotify_url TEXT,
+  audible_url TEXT,
+  is_featured BOOLEAN DEFAULT TRUE,
+  display_order INTEGER DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Indexes for audiobooks
+CREATE INDEX idx_audiobooks_featured ON audiobooks(is_featured, display_order);
+CREATE INDEX idx_audiobooks_order ON audiobooks(display_order);
+
+-- =============================================
 -- FUNCTIONS & TRIGGERS
 -- =============================================
 
@@ -125,6 +170,16 @@ CREATE TRIGGER update_blog_posts_updated_at
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
 
+CREATE TRIGGER update_podcasts_updated_at
+  BEFORE UPDATE ON podcasts
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_audiobooks_updated_at
+  BEFORE UPDATE ON audiobooks
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
 -- =============================================
 -- ROW LEVEL SECURITY (RLS) POLICIES
 -- =============================================
@@ -134,6 +189,8 @@ ALTER TABLE contacts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE blog_posts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE analytics ENABLE ROW LEVEL SECURITY;
 ALTER TABLE newsletter_subscribers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE podcasts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE audiobooks ENABLE ROW LEVEL SECURITY;
 
 -- Contacts: Public can insert, admins can read/update
 CREATE POLICY "Anyone can submit contact form"
@@ -201,6 +258,58 @@ CREATE POLICY "Admins can view subscribers"
 
 CREATE POLICY "Admins can update subscribers"
   ON newsletter_subscribers FOR UPDATE
+  TO authenticated
+  USING (true);
+
+-- Podcasts: Public can read featured, admins can do everything
+CREATE POLICY "Anyone can view featured podcasts"
+  ON podcasts FOR SELECT
+  TO public
+  USING (is_featured = true);
+
+CREATE POLICY "Authenticated users can view all podcasts"
+  ON podcasts FOR SELECT
+  TO authenticated
+  USING (true);
+
+CREATE POLICY "Authenticated users can insert podcasts"
+  ON podcasts FOR INSERT
+  TO authenticated
+  WITH CHECK (true);
+
+CREATE POLICY "Authenticated users can update podcasts"
+  ON podcasts FOR UPDATE
+  TO authenticated
+  USING (true);
+
+CREATE POLICY "Authenticated users can delete podcasts"
+  ON podcasts FOR DELETE
+  TO authenticated
+  USING (true);
+
+-- Audiobooks: Public can read featured, admins can do everything
+CREATE POLICY "Anyone can view featured audiobooks"
+  ON audiobooks FOR SELECT
+  TO public
+  USING (is_featured = true);
+
+CREATE POLICY "Authenticated users can view all audiobooks"
+  ON audiobooks FOR SELECT
+  TO authenticated
+  USING (true);
+
+CREATE POLICY "Authenticated users can insert audiobooks"
+  ON audiobooks FOR INSERT
+  TO authenticated
+  WITH CHECK (true);
+
+CREATE POLICY "Authenticated users can update audiobooks"
+  ON audiobooks FOR UPDATE
+  TO authenticated
+  USING (true);
+
+CREATE POLICY "Authenticated users can delete audiobooks"
+  ON audiobooks FOR DELETE
   TO authenticated
   USING (true);
 
