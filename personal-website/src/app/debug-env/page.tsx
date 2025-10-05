@@ -16,21 +16,31 @@ export default function DebugEnvPage() {
 
     try {
       console.log('Testing Supabase connection...')
-      const supabase = createClient()
 
-      // Test 1: Simple health check
-      const { data, error } = await supabase.auth.getSession()
+      // Test direct fetch to Supabase
+      const directUrl = `${url}/auth/v1/token?grant_type=password`
+      console.log('Testing direct fetch to:', directUrl)
 
-      if (error) {
-        setTestResult(`❌ Error: ${error.message}`)
-        console.error('Supabase test error:', error)
-      } else {
-        setTestResult('✅ Supabase connection successful! Session: ' + (data.session ? 'Active' : 'None'))
-        console.log('Supabase test success:', data)
-      }
+      const response = await fetch(directUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': key || ''
+        },
+        body: JSON.stringify({
+          email: 'test@test.com',
+          password: 'test123'
+        })
+      })
+
+      console.log('Direct fetch response status:', response.status)
+      const responseData = await response.json()
+      console.log('Direct fetch response:', responseData)
+
+      setTestResult(`✅ Direct fetch worked! Status: ${response.status}`)
     } catch (err) {
       setTestResult(`❌ Exception: ${err instanceof Error ? err.message : String(err)}`)
-      console.error('Supabase test exception:', err)
+      console.error('Direct fetch exception:', err)
     } finally {
       setIsLoading(false)
     }
