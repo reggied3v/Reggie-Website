@@ -26,6 +26,9 @@ export function LoginForm() {
       console.log('Attempting login with email:', email)
       const supabase = createClient()
 
+      console.log('Supabase client created, calling signInWithPassword...')
+      console.log('Email:', email.trim(), 'Password length:', password.length)
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password: password,
@@ -34,7 +37,12 @@ export function LoginForm() {
       console.log('Login response:', { data, error })
 
       if (error) {
-        console.error('Login error:', error)
+        console.error('Login error details:', {
+          name: error.name,
+          message: error.message,
+          status: (error as any).status,
+          __isAuthError: (error as any).__isAuthError
+        })
         throw error
       }
 
@@ -43,6 +51,8 @@ export function LoginForm() {
       router.refresh()
     } catch (err) {
       console.error('Login exception:', err)
+      console.error('Error type:', typeof err)
+      console.error('Error constructor:', err?.constructor?.name)
       setError(err instanceof Error ? err.message : 'Invalid login credentials')
     } finally {
       setIsLoading(false)
