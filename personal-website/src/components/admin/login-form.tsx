@@ -1,14 +1,13 @@
 "use client"
 
 import { useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { Lock, Mail } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { createClient } from '@/lib/supabase-browser'
+import { login } from '@/app/admin/login/actions'
 
 export function LoginForm() {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get('redirectTo') || '/admin'
 
@@ -23,35 +22,13 @@ export function LoginForm() {
     setError('')
 
     try {
-      console.log('Attempting login with email:', email)
-      const supabase = createClient()
+      const result = await login(email.trim(), password)
 
-      console.log('Supabase client created, calling signInWithPassword...')
-      console.log('Email:', email.trim(), 'Password length:', password.length)
-
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password: password,
-      })
-
-      console.log('Login response:', { data, error })
-
-      if (error) {
-        console.error('Login error details:', {
-          name: error.name,
-          message: error.message,
-          errorObject: error
-        })
-        throw error
+      if (result?.error) {
+        setError(result.error)
       }
-
-      console.log('Login successful, redirecting to:', redirectTo)
-      router.push(redirectTo)
-      router.refresh()
+      // If successful, the server action will redirect
     } catch (err) {
-      console.error('Login exception:', err)
-      console.error('Error type:', typeof err)
-      console.error('Error constructor:', err?.constructor?.name)
       setError(err instanceof Error ? err.message : 'Invalid login credentials')
     } finally {
       setIsLoading(false)
