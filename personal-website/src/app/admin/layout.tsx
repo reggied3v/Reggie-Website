@@ -8,11 +8,15 @@ export default async function AdminLayout({
 }) {
   const user = await getUser()
 
+  console.log('Admin Layout - User:', user ? 'exists' : 'null')
+
   // If no user, just render children (login page will handle this)
   if (!user) {
+    console.log('Admin Layout - No user, rendering children only')
     return <>{children}</>
   }
 
+  console.log('Admin Layout - Rendering with AdminNav')
   return (
     <div className="min-h-screen bg-background">
       <AdminNav user={user} />
