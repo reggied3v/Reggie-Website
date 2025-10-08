@@ -21,6 +21,12 @@ export default async function AudiobooksPage() {
 
   return (
     <div className="space-y-6">
+      {/* Dev Environment Indicator */}
+      <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded">
+        <p className="font-bold">🔧 Dev Environment</p>
+        <p className="text-sm">You're viewing the development version of this page</p>
+      </div>
+
       <div>
         <h1 className="text-3xl font-bold text-foreground mb-2">Audiobooks</h1>
         <p className="text-muted-foreground">Manage recent audiobooks to display on your homepage</p>
