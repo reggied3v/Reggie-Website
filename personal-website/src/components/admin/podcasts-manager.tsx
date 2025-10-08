@@ -38,44 +38,58 @@ export function PodcastsManager({ initialPodcasts }: PodcastsManagerProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const supabase = createClient()
 
-    if (editingPodcast) {
-      // Update existing
-      const supabase = createClient()
-    const { error } = await supabase
-        .from('podcasts')
-        .update(formData)
-        .eq('id', editingPodcast.id)
+    try {
+      if (editingPodcast) {
+        // Update existing
+        const { error } = await supabase
+          .from('podcasts')
+          .update(formData)
+          .eq('id', editingPodcast.id)
 
-      if (!error) {
+        if (error) {
+          console.error('Error updating podcast:', error)
+          alert(`Failed to update podcast: ${error.message}`)
+          return
+        }
+
         setPodcasts(podcasts.map(p =>
           p.id === editingPodcast.id ? { ...p, ...formData } : p
         ))
-      }
-    } else {
-      // Create new
-      const supabase = createClient()
-      const { data, error } = await supabase
-        .from('podcasts')
-        .insert([{ ...formData, display_order: podcasts.length }])
-        .select()
+      } else {
+        // Create new
+        const { data, error } = await supabase
+          .from('podcasts')
+          .insert([{ ...formData, display_order: podcasts.length }])
+          .select()
 
-      if (!error && data) {
-        setPodcasts([...podcasts, data[0]])
+        if (error) {
+          console.error('Error creating podcast:', error)
+          alert(`Failed to add podcast: ${error.message}`)
+          return
+        }
+
+        if (data) {
+          setPodcasts([...podcasts, data[0]])
+        }
       }
+
+      setIsEditing(false)
+      setEditingPodcast(null)
+      setFormData({
+        title: '',
+        host: '',
+        description: '',
+        cover_image_url: '',
+        spotify_url: '',
+        is_featured: true,
+      })
+      router.refresh()
+    } catch (err) {
+      console.error('Unexpected error:', err)
+      alert('An unexpected error occurred. Please try again.')
     }
-
-    setIsEditing(false)
-    setEditingPodcast(null)
-    setFormData({
-      title: '',
-      host: '',
-      description: '',
-      cover_image_url: '',
-      spotify_url: '',
-      is_featured: true,
-    })
-    router.refresh()
   }
 
   const handleEdit = (podcast: Podcast) => {

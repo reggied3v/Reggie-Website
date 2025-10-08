@@ -1,22 +1,18 @@
-import { createClient as createSupabaseClient } from '@supabase/supabase-js'
+import { createBrowserClient } from '@supabase/ssr'
+import type { SupabaseClient } from '@supabase/supabase-js'
+
+let client: SupabaseClient | undefined
 
 export function createClient() {
+  // Create a singleton client to avoid multiple instances
+  if (client) {
+    return client
+  }
+
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL!.trim()
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!.trim().replace(/\s/g, '')
 
-  console.log('Creating browser client with:', {
-    url,
-    urlLength: url?.length,
-    keyLength: key?.length,
-    urlType: typeof url,
-    keyType: typeof key
-  })
+  client = createBrowserClient(url, key)
 
-  return createSupabaseClient(url, key, {
-    auth: {
-      autoRefreshToken: true,
-      persistSession: true,
-      detectSessionInUrl: true
-    }
-  })
+  return client
 }

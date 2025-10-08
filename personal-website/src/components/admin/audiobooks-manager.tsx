@@ -42,42 +42,61 @@ export function AudiobooksManager({ initialAudiobooks }: AudiobooksManagerProps)
     e.preventDefault()
     const supabase = createClient()
 
-    if (editingAudiobook) {
-      // Update existing
-      const { error } = await supabase
-        .from('audiobooks')
-        .update(formData)
-        .eq('id', editingAudiobook.id)
+    // Debug: Check if user is authenticated
+    const { data: { session } } = await supabase.auth.getSession()
+    console.log('Session check:', session ? 'Authenticated' : 'Not authenticated', session)
 
-      if (!error) {
+    try {
+      if (editingAudiobook) {
+        // Update existing
+        const { error } = await supabase
+          .from('audiobooks')
+          .update(formData)
+          .eq('id', editingAudiobook.id)
+
+        if (error) {
+          console.error('Error updating audiobook:', error)
+          alert(`Failed to update audiobook: ${error.message}`)
+          return
+        }
+
         setAudiobooks(audiobooks.map(a =>
           a.id === editingAudiobook.id ? { ...a, ...formData } : a
         ))
-      }
-    } else {
-      // Create new
-      const { data, error } = await supabase
-        .from('audiobooks')
-        .insert([{ ...formData, display_order: audiobooks.length }])
-        .select()
+      } else {
+        // Create new
+        const { data, error } = await supabase
+          .from('audiobooks')
+          .insert([{ ...formData, display_order: audiobooks.length }])
+          .select()
 
-      if (!error && data) {
-        setAudiobooks([...audiobooks, data[0]])
+        if (error) {
+          console.error('Error creating audiobook:', error)
+          alert(`Failed to add audiobook: ${error.message}`)
+          return
+        }
+
+        if (data) {
+          setAudiobooks([...audiobooks, data[0]])
+        }
       }
+
+      setIsEditing(false)
+      setEditingAudiobook(null)
+      setFormData({
+        title: '',
+        author: '',
+        description: '',
+        cover_image_url: '',
+        spotify_url: '',
+        audible_url: '',
+        is_featured: true,
+      })
+      router.refresh()
+    } catch (err) {
+      console.error('Unexpected error:', err)
+      alert('An unexpected error occurred. Please try again.')
     }
-
-    setIsEditing(false)
-    setEditingAudiobook(null)
-    setFormData({
-      title: '',
-      author: '',
-      description: '',
-      cover_image_url: '',
-      spotify_url: '',
-      audible_url: '',
-      is_featured: true,
-    })
-    router.refresh()
   }
 
   const handleEdit = (audiobook: Audiobook) => {
