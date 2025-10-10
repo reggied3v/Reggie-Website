@@ -51,7 +51,7 @@ export function AudiobooksManager({ initialAudiobooks }: AudiobooksManagerProps)
         // Update existing
         const { error } = await supabase
           .from('audiobooks')
-          .update(formData)
+          .update(formData as any)
           .eq('id', editingAudiobook.id)
 
         if (error) {
@@ -67,7 +67,7 @@ export function AudiobooksManager({ initialAudiobooks }: AudiobooksManagerProps)
         // Create new
         const { data, error } = await supabase
           .from('audiobooks')
-          .insert([{ ...formData, display_order: audiobooks.length }])
+          .insert([{ ...formData, display_order: audiobooks.length }] as any)
           .select()
 
         if (error) {

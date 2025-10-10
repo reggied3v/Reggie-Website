@@ -1,7 +1,6 @@
 import { createBrowserClient } from '@supabase/ssr'
-import type { SupabaseClient } from '@supabase/supabase-js'
 
-let client: SupabaseClient | undefined
+let client: ReturnType<typeof createBrowserClient> | undefined
 
 export function createClient() {
   // Create a singleton client to avoid multiple instances

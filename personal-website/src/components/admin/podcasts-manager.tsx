@@ -45,7 +45,7 @@ export function PodcastsManager({ initialPodcasts }: PodcastsManagerProps) {
         // Update existing
         const { error } = await supabase
           .from('podcasts')
-          .update(formData)
+          .update(formData as any)
           .eq('id', editingPodcast.id)
 
         if (error) {
@@ -61,7 +61,7 @@ export function PodcastsManager({ initialPodcasts }: PodcastsManagerProps) {
         // Create new
         const { data, error } = await supabase
           .from('podcasts')
-          .insert([{ ...formData, display_order: podcasts.length }])
+          .insert([{ ...formData, display_order: podcasts.length }] as any)
           .select()
 
         if (error) {
