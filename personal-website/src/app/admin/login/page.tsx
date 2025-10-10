@@ -1,12 +1,20 @@
 import { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 import { LoginForm } from '@/components/admin/login-form'
+import { getUser } from '@/lib/supabase-server'
 
 export const metadata: Metadata = {
   title: 'Admin Login | ReggieD3V',
   description: 'Sign in to access the admin panel',
 }
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  // If already logged in, redirect to admin dashboard
+  const user = await getUser()
+  if (user) {
+    redirect('/admin')
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-accent/5">
       <div className="w-full max-w-md px-4">

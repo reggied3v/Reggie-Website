@@ -28,16 +28,18 @@ export async function middleware(request: NextRequest) {
   )
 
   // Refresh session if expired - required for Server Components
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session }, error } = await supabase.auth.getSession()
 
   // Protect admin routes
   if (request.nextUrl.pathname.startsWith('/admin') &&
       !request.nextUrl.pathname.startsWith('/admin/login')) {
-    if (!user) {
+    if (!session) {
+      console.log('Middleware: No session found, redirecting to login')
       const url = request.nextUrl.clone()
       url.pathname = '/admin/login'
       return NextResponse.redirect(url)
     }
+    console.log('Middleware: Session found for:', session.user.email)
   }
 
   return supabaseResponse
