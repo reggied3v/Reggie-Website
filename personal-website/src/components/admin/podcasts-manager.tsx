@@ -43,9 +43,10 @@ export function PodcastsManager({ initialPodcasts }: PodcastsManagerProps) {
     try {
       if (editingPodcast) {
         // Update existing
-        const { error } = await supabase
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { error } = await (supabase as any)
           .from('podcasts')
-          .update(formData as any)
+          .update(formData)
           .eq('id', editingPodcast.id)
 
         if (error) {
@@ -59,9 +60,10 @@ export function PodcastsManager({ initialPodcasts }: PodcastsManagerProps) {
         ))
       } else {
         // Create new
-        const { data, error } = await supabase
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data, error } = await (supabase as any)
           .from('podcasts')
-          .insert([{ ...formData, display_order: podcasts.length }] as any)
+          .insert([{ ...formData, display_order: podcasts.length }])
           .select()
 
         if (error) {
@@ -109,7 +111,8 @@ export function PodcastsManager({ initialPodcasts }: PodcastsManagerProps) {
     if (!confirm('Are you sure you want to delete this podcast?')) return
 
     const supabase = createClient()
-    const { error } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase as any)
       .from('podcasts')
       .delete()
       .eq('id', id)
@@ -122,7 +125,8 @@ export function PodcastsManager({ initialPodcasts }: PodcastsManagerProps) {
 
   const toggleFeatured = async (id: string, currentStatus: boolean) => {
     const supabase = createClient()
-    const { error } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase as any)
       .from('podcasts')
       .update({ is_featured: !currentStatus })
       .eq('id', id)

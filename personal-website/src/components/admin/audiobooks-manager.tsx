@@ -49,9 +49,10 @@ export function AudiobooksManager({ initialAudiobooks }: AudiobooksManagerProps)
     try {
       if (editingAudiobook) {
         // Update existing
-        const { error } = await supabase
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { error } = await (supabase as any)
           .from('audiobooks')
-          .update(formData as any)
+          .update(formData)
           .eq('id', editingAudiobook.id)
 
         if (error) {
@@ -65,9 +66,10 @@ export function AudiobooksManager({ initialAudiobooks }: AudiobooksManagerProps)
         ))
       } else {
         // Create new
-        const { data, error } = await supabase
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data, error } = await (supabase as any)
           .from('audiobooks')
-          .insert([{ ...formData, display_order: audiobooks.length }] as any)
+          .insert([{ ...formData, display_order: audiobooks.length }])
           .select()
 
         if (error) {
@@ -117,7 +119,8 @@ export function AudiobooksManager({ initialAudiobooks }: AudiobooksManagerProps)
     if (!confirm('Are you sure you want to delete this audiobook?')) return
     const supabase = createClient()
 
-    const { error } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase as any)
       .from('audiobooks')
       .delete()
       .eq('id', id)
@@ -131,7 +134,8 @@ export function AudiobooksManager({ initialAudiobooks }: AudiobooksManagerProps)
   const toggleFeatured = async (id: string, currentStatus: boolean) => {
     const supabase = createClient()
 
-    const { error } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase as any)
       .from('audiobooks')
       .update({ is_featured: !currentStatus })
       .eq('id', id)

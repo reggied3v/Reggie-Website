@@ -35,7 +35,8 @@ export function ContactsList({ initialContacts }: ContactsListProps) {
 
   const handleMarkAsRead = async (contactId: string, isRead: boolean) => {
     const supabase = createClient()
-    const { error } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase as any)
       .from('contacts')
       .update({ is_read: !isRead })
       .eq('id', contactId)
@@ -55,7 +56,8 @@ export function ContactsList({ initialContacts }: ContactsListProps) {
     if (!confirm('Are you sure you want to delete this contact?')) return
 
     const supabase = createClient()
-    const { error } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase as any)
       .from('contacts')
       .delete()
       .eq('id', contactId)
