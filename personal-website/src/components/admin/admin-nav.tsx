@@ -18,7 +18,7 @@ const navItems = [
   // { href: '/admin/blog', label: 'Blog Posts', icon: FileText },
   { href: '/admin/podcasts', label: 'Podcasts', icon: Headphones },
   { href: '/admin/audiobooks', label: 'Audiobooks', icon: BookOpen },
-  { href: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
+  // { href: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
   { href: '/admin/settings', label: 'Settings', icon: Settings },
 ]
 

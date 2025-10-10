@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { supabase } from "@/lib/supabase"
+import { submitContactForm } from "@/app/actions/contact"
 
 interface FormData {
   name: string
@@ -38,17 +38,10 @@ export function ContactForm() {
     setErrorMessage('')
 
     try {
-      const { error } = await supabase
-        .from('contacts')
-        .insert([{
-          name: formData.name,
-          email: formData.email,
-          subject: formData.subject,
-          message: formData.message
-        }])
+      const result = await submitContactForm(formData)
 
-      if (error) {
-        throw error
+      if (!result.success) {
+        throw new Error(result.error || 'Something went wrong')
       }
 
       setSubmitStatus('success')
