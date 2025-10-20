@@ -59,7 +59,7 @@ export function HeroSection() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.8 }}
             >
-              ReggieD3V
+              Reggie Ragsdale
             </motion.span>
           </motion.h1>
 
@@ -69,7 +69,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            Developer • Creator • Problem Solver
+            Digital Delivery Lead • Scrum Master • Agile Coach
           </motion.p>
 
           <motion.p
@@ -78,7 +78,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
           >
-            Passionate about creating innovative solutions and building amazing applications that make a difference in people&apos;s lives.
+            Dynamic leader with 19+ years at Bosch, specializing in Agile coaching, digital transformation, and leading high-performing teams to deliver innovative solutions that drive measurable business impact.
           </motion.p>
 
           <motion.div
@@ -131,7 +131,7 @@ export function HeroSection() {
               <Linkedin className="w-6 h-6" />
             </motion.a>
             <motion.a
-              href="mailto:hello@reggied3v.com"
+              href="mailto:Reggie.Ragsdale@us.bosch.com"
               className="text-muted-foreground hover:text-accent smooth-transition"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}

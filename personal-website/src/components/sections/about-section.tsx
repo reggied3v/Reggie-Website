@@ -6,28 +6,28 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 const skills = [
   {
-    icon: Globe,
-    title: "Web Development",
-    description: "Building modern, responsive web applications with React, Next.js, and TypeScript.",
-    technologies: ["React", "Next.js", "TypeScript", "Tailwind CSS"]
+    icon: Code2,
+    title: "Agile & Scrum",
+    description: "Certified Scrum Master and Product Owner, leading global teams and coaching Agile transformation.",
+    technologies: ["JIRA", "Azure DevOps", "LeSS", "SAFe"]
   },
   {
     icon: Database,
-    title: "Backend Development",
-    description: "Creating robust APIs and server-side applications with Node.js and Python.",
-    technologies: ["Node.js", "Python", "PostgreSQL", "MongoDB"]
+    title: "AI & Automation",
+    description: "AI Product Management and enablement, leveraging Microsoft Power Platform for automation solutions.",
+    technologies: ["AI Tools", "Power Platform", "Power Automate", "Power BI"]
+  },
+  {
+    icon: Globe,
+    title: "Analytics & UX",
+    description: "Data-driven decision making with analytics tools and user-centered design thinking methodologies.",
+    technologies: ["Google Analytics", "Power BI", "UX Design", "OKR Strategy"]
   },
   {
     icon: Smartphone,
-    title: "Mobile Development",
-    description: "Developing cross-platform mobile applications with React Native and Flutter.",
-    technologies: ["React Native", "Flutter", "iOS", "Android"]
-  },
-  {
-    icon: Code2,
-    title: "DevOps & Tools",
-    description: "Streamlining development workflows with modern tools and cloud platforms.",
-    technologies: ["Docker", "AWS", "Git", "CI/CD"]
+    title: "Digital Transformation",
+    description: "Leading large-scale digital initiatives, product launches, and go-to-market strategies.",
+    technologies: ["Product Management", "Sales Enablement", "Strategy", "Leadership"]
   }
 ]
 
@@ -46,9 +46,10 @@ export function AboutSection() {
             About Me
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            I&apos;m a passionate developer with a love for creating innovative solutions.
-            With expertise across the full stack, I enjoy turning complex problems
-            into simple, elegant designs that deliver exceptional user experiences.
+            Dynamic and entrepreneurial leader with over 19 years at Bosch, specializing in Agile
+            coaching across global service areas, IT Consulting, and Digital Transformation. Proven
+            track record in leading large-scale digital transformation initiatives and coaching
+            high-performing, cross-functional teams.
           </p>
         </motion.div>
 
@@ -105,17 +106,20 @@ export function AboutSection() {
             </CardHeader>
             <CardContent className="text-left">
               <p className="text-muted-foreground mb-4">
-                My journey in technology began with curiosity and has evolved into a passion for creating
-                digital experiences that matter. I believe in the power of clean code, thoughtful design,
-                and continuous learning.
+                As Digital Delivery Lead & Scrum Master at Bosch, I led the end-to-end launch of a
+                smart information hub, scaling it from concept to 20,000+ users in under two years.
+                I defined product-market fit, established OKRs and KPIs, and implemented a repeatable
+                go-to-market strategy—resulting in our first external sale (RBHU, 5,000 licenses) within two months.
               </p>
               <p className="text-muted-foreground mb-4">
-                When I&apos;m not coding, you can find me exploring new technologies, contributing to open-source
-                projects, or sharing knowledge with the developer community. I&apos;m always excited to tackle
-                new challenges and collaborate on meaningful projects.
+                I&apos;ve served as Global Scrum Master and Agile Coach across multiple workstreams, building
+                high-performing, cross-functional teams across countries. I drive strategic decisions—from
+                budget allocation and team composition to course corrections—while fostering a culture of
+                collaboration, growth, and innovation.
               </p>
               <p className="text-muted-foreground">
-                Let&apos;s build something amazing together!
+                Known for fostering collaboration, leading by example, and promoting sustainable team
+                success through Agile principles and continuous improvement.
               </p>
             </CardContent>
           </Card>

@@ -7,57 +7,45 @@ import { Button } from "@/components/ui/button"
 
 const projects = [
   {
-    title: "E-Commerce Platform",
-    description: "A modern, full-stack e-commerce platform built with Next.js, featuring real-time inventory management, secure payments, and an intuitive admin dashboard.",
+    title: "Smart Information Hub",
+    description: "Led end-to-end launch of GS's smart information hub, scaling from concept to 20,000+ users in under two years. Defined product-market fit, established OKRs/KPIs, and achieved first external sale (5,000 licenses) within two months.",
     image: "/api/placeholder/600/400",
-    technologies: ["Next.js", "TypeScript", "Stripe", "PostgreSQL", "Tailwind CSS"],
-    github: "https://github.com/reggied3v/ecommerce-platform",
-    demo: "https://demo-ecommerce.reggied3v.com",
+    technologies: ["Product Management", "OKR", "Go-to-Market", "Gen AI", "DIA Brain"],
     featured: true
   },
   {
-    title: "Task Management App",
-    description: "A collaborative task management application with real-time updates, team collaboration features, and advanced project analytics.",
+    title: "Enterprise Scrum Scaling",
+    description: "Scaled Enterprise Scrum to 12 teams supporting 20,000+ customers across the Americas. Served as Global Scrum Master and Agile Coach, building high-performing cross-functional teams across multiple countries.",
     image: "/api/placeholder/600/400",
-    technologies: ["React", "Node.js", "Socket.io", "MongoDB", "Material-UI"],
-    github: "https://github.com/reggied3v/task-manager",
-    demo: "https://tasks.reggied3v.com",
+    technologies: ["Scrum", "Agile Coaching", "JIRA", "Azure DevOps", "LeSS"],
     featured: true
   },
   {
-    title: "AI-Powered Analytics Dashboard",
-    description: "An intelligent analytics dashboard that provides actionable insights using machine learning algorithms and beautiful data visualizations.",
+    title: "Mac@Bosch Initiative",
+    description: "Served as North America Responsible for the Mac@Bosch initiative, leading strategy and implementation across the region. Championed technology adoption and internal community building.",
     image: "/api/placeholder/600/400",
-    technologies: ["Python", "FastAPI", "React", "D3.js", "TensorFlow"],
-    github: "https://github.com/reggied3v/ai-analytics",
-    demo: "https://analytics.reggied3v.com",
+    technologies: ["IT Consulting", "Strategy", "Change Management", "Leadership"],
     featured: true
   },
   {
-    title: "Mobile Fitness Tracker",
-    description: "A cross-platform mobile app for fitness tracking with workout plans, progress monitoring, and social features.",
+    title: "Power Platform Strategy",
+    description: "Led Power Platform strategy and enablement in North America, implementing automation improvements across multiple regions and uncovering over 30 FTE of new consulting potential.",
     image: "/api/placeholder/600/400",
-    technologies: ["React Native", "Expo", "Firebase", "Redux", "Chart.js"],
-    github: "https://github.com/reggied3v/fitness-tracker",
-    demo: "https://fitness.reggied3v.com",
+    technologies: ["Power Platform", "Power Automate", "Automation", "Capacity Planning"],
     featured: false
   },
   {
-    title: "Real-time Chat Application",
-    description: "A feature-rich chat application with file sharing, voice messages, and end-to-end encryption.",
+    title: "Curated Information Page",
+    description: "Developed and deployed curated information page to 20,000+ desktops, improving user access to critical tools and resources across the Americas. Enhanced productivity and user experience company-wide.",
     image: "/api/placeholder/600/400",
-    technologies: ["Vue.js", "Socket.io", "Node.js", "Redis", "WebRTC"],
-    github: "https://github.com/reggied3v/chat-app",
-    demo: "https://chat.reggied3v.com",
+    technologies: ["Deployment", "IT Support", "User Experience", "Scale"],
     featured: false
   },
   {
-    title: "Blockchain Voting System",
-    description: "A secure, transparent voting system built on blockchain technology ensuring election integrity and voter privacy.",
+    title: "Customer-Centric Development",
+    description: "Implemented a customer-centric development cycle leveraging user feedback, mockups, and iterative development to deliver measurable customer value in every sprint.",
     image: "/api/placeholder/600/400",
-    technologies: ["Solidity", "Web3.js", "React", "Ethereum", "IPFS"],
-    github: "https://github.com/reggied3v/blockchain-voting",
-    demo: "https://vote.reggied3v.com",
+    technologies: ["Agile", "UX Design Thinking", "Iterative Development", "Customer Value"],
     featured: false
   }
 ]
@@ -77,10 +65,10 @@ export function ProjectsSection() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-bold text-foreground mb-6">
-            Featured Projects
+            Key Achievements
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Here are some of my recent projects that showcase my skills and passion for creating innovative solutions.
+            Highlights from my 19+ years at Bosch, leading digital transformation initiatives and delivering measurable business impact.
           </p>
         </motion.div>
 
@@ -97,23 +85,7 @@ export function ProjectsSection() {
               <Card className="h-full glass hover:shadow-xl smooth-transition group overflow-hidden">
                 <div className="relative overflow-hidden">
                   <div className="w-full h-48 bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center">
-                    <span className="text-accent/60 text-sm">Project Image</span>
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 smooth-transition flex items-center justify-center">
-                    <div className="flex space-x-2">
-                      <Button size="sm" variant="secondary" asChild>
-                        <a href={project.demo} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink className="w-4 h-4 mr-2" />
-                          Demo
-                        </a>
-                      </Button>
-                      <Button size="sm" variant="secondary" asChild>
-                        <a href={project.github} target="_blank" rel="noopener noreferrer">
-                          <Github className="w-4 h-4 mr-2" />
-                          Code
-                        </a>
-                      </Button>
-                    </div>
+                    <span className="text-accent/60 text-sm font-semibold">{project.title}</span>
                   </div>
                 </div>
                 <CardHeader>
@@ -146,7 +118,7 @@ export function ProjectsSection() {
           className="text-center mb-8"
         >
           <h3 className="text-2xl font-bold text-foreground mb-4">
-            Other Notable Projects
+            Additional Initiatives
           </h3>
         </motion.div>
 
@@ -161,27 +133,7 @@ export function ProjectsSection() {
             >
               <Card className="h-full glass hover:shadow-lg smooth-transition group">
                 <CardHeader>
-                  <div className="flex justify-between items-start mb-2">
-                    <CardTitle className="text-lg">{project.title}</CardTitle>
-                    <div className="flex space-x-2 opacity-0 group-hover:opacity-100 smooth-transition">
-                      <a
-                        href={project.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-muted-foreground hover:text-accent smooth-transition"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-muted-foreground hover:text-accent smooth-transition"
-                      >
-                        <Github className="w-4 h-4" />
-                      </a>
-                    </div>
-                  </div>
+                  <CardTitle className="text-lg">{project.title}</CardTitle>
                   <CardDescription className="text-sm">{project.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -213,11 +165,11 @@ export function ProjectsSection() {
           viewport={{ once: true }}
           className="text-center mt-12"
         >
-          <Button variant="secondary" size="lg" asChild>
-            <a href="https://github.com/reggied3v" target="_blank" rel="noopener noreferrer">
-              <Github className="w-5 h-5 mr-2" />
-              View All Projects on GitHub
-            </a>
+          <Button variant="secondary" size="lg" onClick={() => {
+            document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+          }}>
+            <ExternalLink className="w-5 h-5 mr-2" />
+            Get In Touch
           </Button>
         </motion.div>
       </div>
