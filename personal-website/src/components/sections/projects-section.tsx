@@ -8,14 +8,14 @@ import { Button } from "@/components/ui/button"
 const projects = [
   {
     title: "Smart Information Hub",
-    description: "Led end-to-end launch of GS's smart information hub, scaling from concept to 20,000+ users in under two years. Defined product-market fit, established OKRs/KPIs, and achieved first external sale (5,000 licenses) within two months.",
+    description: "Led end-to-end launch of internal Bosch smart information hub, scaling from concept to 20,000+ users in under two years. Defined product-market fit, established OKRs/KPIs, and achieved first external sale (5,000 licenses) within two months.",
     image: "/api/placeholder/600/400",
     technologies: ["Product Management", "OKR", "Go-to-Market", "Gen AI", "DIA Brain"],
     featured: true
   },
   {
     title: "Enterprise Scrum Scaling",
-    description: "Scaled Enterprise Scrum to 12 teams supporting 20,000+ customers across the Americas. Served as Global Scrum Master and Agile Coach, building high-performing cross-functional teams across multiple countries.",
+    description: "Scaled Enterprise Scrum to 12 IT Support teams supporting 20,000+ customers across the Americas. Served as Global Scrum Master and Agile Coach, building high-performing cross-functional teams across multiple countries.",
     image: "/api/placeholder/600/400",
     technologies: ["Scrum", "Agile Coaching", "JIRA", "Azure DevOps", "LeSS"],
     featured: true
@@ -29,9 +29,9 @@ const projects = [
   },
   {
     title: "Power Platform Strategy",
-    description: "Led Power Platform strategy and enablement in North America, implementing automation improvements across multiple regions and uncovering over 30 FTE of new consulting potential.",
+    description: "Led Power Platform strategy and enablement in North America, implementing automation improvements across multiple regions.",
     image: "/api/placeholder/600/400",
-    technologies: ["Power Platform", "Power Automate", "Automation", "Capacity Planning"],
+    technologies: ["Power Platform", "Power Automate", "Automation", "Strategy"],
     featured: false
   },
   {
@@ -89,7 +89,7 @@ export function ProjectsSection() {
                   </div>
                 </div>
                 <CardHeader>
-                  <CardTitle className="text-xl">{project.title}</CardTitle>
+                  <CardTitle className="text-2xl">{project.title}</CardTitle>
                   <CardDescription>{project.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -138,7 +138,7 @@ export function ProjectsSection() {
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-1">
-                    {project.technologies.slice(0, 3).map((tech) => (
+                    {project.technologies.map((tech) => (
                       <span
                         key={tech}
                         className="px-2 py-1 text-xs bg-accent/10 text-accent rounded-md"
@@ -146,11 +146,6 @@ export function ProjectsSection() {
                         {tech}
                       </span>
                     ))}
-                    {project.technologies.length > 3 && (
-                      <span className="px-2 py-1 text-xs text-muted-foreground">
-                        +{project.technologies.length - 3} more
-                      </span>
-                    )}
                   </div>
                 </CardContent>
               </Card>

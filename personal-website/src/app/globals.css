@@ -1,21 +1,36 @@
 @import "tailwindcss";
 
 :root {
-  /* Custom color system - Dark background with cream and vibrant yellow accents */
+  /* Custom color system - Dark background with vibrant multi-color accents */
   --background: #282D35;
-  --foreground: #F0ECD9;
+  --foreground: #FFFFFF;
   --muted: #3a3f49;
-  --muted-foreground: #b8b4a3;
-  --accent: #F4D03F;
-  --accent-foreground: #282D35;
+  --muted-foreground: #D1CFC8;
+
+  /* Primary accent - Yellow */
+  --accent: #FFD93D;
+  --accent-foreground: #1a1d23;
+  --accent-rgb: 255, 217, 61;
+
+  /* Secondary accent - Cream */
   --secondary: #F0ECD9;
   --secondary-foreground: #282D35;
-  --destructive: #e53e3e;
-  --border: #4a4f59;
+
+  /* Additional accents */
+  --accent-blue: #4FC3F7;
+  --accent-blue-foreground: #1a1d23;
+  --accent-blue-rgb: 79, 195, 247;
+
+  --accent-orange: #FFB74D;
+  --accent-orange-foreground: #1a1d23;
+  --accent-orange-rgb: 255, 183, 77;
+
+  --destructive: #FF5252;
+  --border: #5a5f69;
   --input: #3a3f49;
-  --ring: #F4D03F;
-  --card: #31363f;
-  --card-foreground: #F0ECD9;
+  --ring: #FFD93D;
+  --card: #363c47;
+  --card-foreground: #FFFFFF;
 
   /* Typography scale */
   --font-size-xs: 0.75rem;
@@ -50,6 +65,10 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent-blue: var(--accent-blue);
+  --color-accent-blue-foreground: var(--accent-blue-foreground);
+  --color-accent-orange: var(--accent-orange);
+  --color-accent-orange-foreground: var(--accent-orange-foreground);
   --color-destructive: var(--destructive);
   --color-border: var(--border);
   --color-input: var(--input);

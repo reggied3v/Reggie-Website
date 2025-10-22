@@ -8,26 +8,30 @@ const skills = [
   {
     icon: Code2,
     title: "Agile & Scrum",
-    description: "Certified Scrum Master and Product Owner, leading global teams and coaching Agile transformation.",
-    technologies: ["JIRA", "Azure DevOps", "LeSS", "SAFe"]
+    description: "Certified Scrum Master, Product Owner, and Advanced Scrum Master, leading global teams and coaching Agile transformation with experience in scaled Scrum approaches.",
+    technologies: ["JIRA", "Azure DevOps", "LeSS", "SAFe"],
+    color: "accent"
   },
   {
     icon: Database,
     title: "AI & Automation",
-    description: "AI Product Management and enablement, leveraging Microsoft Power Platform for automation solutions.",
-    technologies: ["AI Tools", "Power Platform", "Power Automate", "Power BI"]
+    description: "AI Product Management and enablement, leveraging Microsoft Power Platform for automation solutions and integrating Gen AI experiences into platforms.",
+    technologies: ["Gen AI", "Power Platform", "Power Automate", "Power BI"],
+    color: "accent-blue"
   },
   {
     icon: Globe,
     title: "Analytics & UX",
     description: "Data-driven decision making with analytics tools and user-centered design thinking methodologies.",
-    technologies: ["Google Analytics", "Power BI", "UX Design", "OKR Strategy"]
+    technologies: ["Google Analytics", "Power BI", "UX Design Thinking", "OKR Strategy"],
+    color: "accent-orange"
   },
   {
     icon: Smartphone,
     title: "Digital Transformation",
-    description: "Leading large-scale digital initiatives, product launches, and go-to-market strategies.",
-    technologies: ["Product Management", "Sales Enablement", "Strategy", "Leadership"]
+    description: "Leading large-scale digitalization initiatives, product launches, and customer care support.",
+    technologies: ["Product Management", "Customer Care", "Strategy", "Leadership"],
+    color: "accent"
   }
 ]
 
@@ -65,11 +69,14 @@ export function AboutSection() {
               <Card className="h-full glass hover:shadow-lg smooth-transition group">
                 <CardHeader className="text-center">
                   <motion.div
-                    className="mx-auto mb-4 p-3 rounded-full bg-accent/10 w-fit group-hover:bg-accent/20 smooth-transition"
+                    className="mx-auto mb-4 p-3 rounded-full w-fit smooth-transition relative"
+                    style={{
+                      backgroundColor: `rgba(var(--${skill.color}-rgb), 0.1)`
+                    }}
                     whileHover={{ scale: 1.1 }}
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   >
-                    <skill.icon className="w-8 h-8 text-accent" />
+                    <skill.icon className="w-8 h-8" style={{ color: `var(--${skill.color})` }} />
                   </motion.div>
                   <CardTitle className="text-xl mb-2">{skill.title}</CardTitle>
                   <CardDescription className="text-sm">
@@ -81,7 +88,11 @@ export function AboutSection() {
                     {skill.technologies.map((tech) => (
                       <span
                         key={tech}
-                        className="px-2 py-1 text-xs bg-accent/10 text-accent rounded-md"
+                        className="px-2 py-1 text-xs rounded-md font-medium"
+                        style={{
+                          backgroundColor: `rgba(var(--${skill.color}-rgb), 0.15)`,
+                          color: `var(--${skill.color})`
+                        }}
                       >
                         {tech}
                       </span>
