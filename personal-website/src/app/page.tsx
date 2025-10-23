@@ -3,6 +3,7 @@ import { HeroSection } from "@/components/sections/hero-section"
 import { AboutSection } from "@/components/sections/about-section"
 import { AIAssessmentCTA } from "@/components/sections/ai-assessment-cta"
 import { AIScrumMasterSection } from "@/components/sections/ai-scrum-master-section"
+import { OfferingComparison } from "@/components/sections/offering-comparison"
 import { ProjectsSection } from "@/components/sections/projects-section"
 import { ContactSection } from "@/components/sections/contact-section"
 import { HomepageSidebar } from "@/components/homepage-sidebar"
@@ -16,8 +17,9 @@ export default function Home() {
         <AboutSection />
         <ProjectsSection />
         <HomepageSidebar />
-        <AIScrumMasterSection />
+        <OfferingComparison />
         <AIAssessmentCTA />
+        <AIScrumMasterSection />
         <ContactSection />
       </main>
     </div>

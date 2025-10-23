@@ -53,8 +53,8 @@ export function AIAssessmentCTA() {
                     viewport={{ once: true }}
                     className="text-lg text-muted-foreground mb-8"
                   >
-                    Take my AI-powered Scrum Master Assessment and receive personalized,
-                    actionable recommendations to improve your team&apos;s agile practices.
+                    Get an instant snapshot of your team&apos;s Agile maturity with my one-time,
+                    AI-powered assessment. Receive personalized recommendations in minutes—completely free.
                   </motion.p>
 
                   <motion.div
@@ -65,10 +65,10 @@ export function AIAssessmentCTA() {
                     className="space-y-3 mb-8"
                   >
                     {[
-                      "15-minute comprehensive assessment",
-                      "AI-generated personalized recommendations",
-                      "Downloadable PDF report with actionable insights",
-                      "Based on 10+ years Agile experience and 20+ years IT experience and consulting"
+                      "One-time, 15-minute assessment",
+                      "Instant AI-generated recommendations",
+                      "Downloadable PDF report",
+                      "Free—no credit card required"
                     ].map((benefit, index) => (
                       <div key={index} className="flex items-start gap-3">
                         <CheckCircle2 className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
@@ -84,13 +84,16 @@ export function AIAssessmentCTA() {
                     viewport={{ once: true }}
                   >
                     <Button size="lg" className="text-lg px-8 py-6 group" asChild>
-                      <Link href="/ai-scrum-master">
+                      <Link href="/ai-scrum-master/assessment">
                         Take the Assessment
                         <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                       </Link>
                     </Button>
                     <p className="text-sm text-muted-foreground mt-4">
                       Free • No credit card required • Get results immediately
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      Want continuous coaching? <Link href="#ai-scrum-master" className="text-accent hover:underline">Try AI Scrum Master →</Link>
                     </p>
                   </motion.div>
                 </div>

@@ -96,7 +96,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
           >
-            Dynamic leader with 19+ years at Bosch, specializing in Agile coaching, digital transformation, and leading high-performing teams to deliver innovative solutions that drive measurable business impact.
+            Dynamic leader with 19+ years at Bosch, helping teams improve Agile practices through AI-powered assessments and continuous coaching. Specializing in digital transformation and leading high-performing teams to deliver measurable business impact.
           </motion.p>
 
           <motion.div

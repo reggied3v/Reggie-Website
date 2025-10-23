@@ -26,7 +26,7 @@ export function AIScrumMasterSection() {
             AI Scrum Master
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Transform your Agile ceremonies with continuous AI-powered insights. Upload meeting transcripts and get instant analysis, health tracking, and personalized coaching.
+            Go beyond one-time assessments with ongoing AI coaching for every sprint. Upload meeting transcripts and get continuous analysis, health tracking, and personalized recommendations.
           </p>
         </motion.div>
 
@@ -35,23 +35,23 @@ export function AIScrumMasterSection() {
           {[
             {
               icon: MessageSquare,
-              title: "Meeting Analysis",
-              description: "AI analyzes every standup, retro, and planning session"
+              title: "Every Meeting",
+              description: "Continuous AI analysis of standups, retros, and planning sessions"
             },
             {
               icon: BarChart3,
-              title: "Health Tracking",
-              description: "Monitor team engagement and collaboration over time"
+              title: "Track Over Time",
+              description: "Monitor team health and engagement trends across sprints"
             },
             {
               icon: Target,
-              title: "Action Items",
-              description: "Auto-extract and track tasks with priorities"
+              title: "Ongoing Action Items",
+              description: "Auto-extract, assign, and track tasks sprint after sprint"
             },
             {
               icon: Brain,
-              title: "Smart Coaching",
-              description: "Get personalized suggestions to improve"
+              title: "Evolving Insights",
+              description: "Get smarter coaching recommendations as patterns emerge"
             }
           ].map((feature, index) => (
             <motion.div
@@ -90,6 +90,9 @@ export function AIScrumMasterSection() {
               <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
             </Link>
           </Button>
+          <p className="text-sm text-muted-foreground mt-4">
+            Not sure where to start? <Link href="/ai-scrum-master/assessment" className="text-accent hover:underline">Take our free assessment first →</Link>
+          </p>
         </motion.div>
       </div>
     </section>
