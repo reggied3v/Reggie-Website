@@ -6,6 +6,7 @@ import { AIScrumMasterSection } from "@/components/sections/ai-scrum-master-sect
 import { OfferingComparison } from "@/components/sections/offering-comparison"
 import { ProjectsSection } from "@/components/sections/projects-section"
 import { ContactSection } from "@/components/sections/contact-section"
+import { BuiltWithSection } from "@/components/sections/built-with-section"
 import { HomepageSidebar } from "@/components/homepage-sidebar"
 
 export default function Home() {
@@ -21,6 +22,7 @@ export default function Home() {
         <AIAssessmentCTA />
         <AIScrumMasterSection />
         <ContactSection />
+        <BuiltWithSection />
       </main>
     </div>
   )
