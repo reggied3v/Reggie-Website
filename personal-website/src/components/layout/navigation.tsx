@@ -42,11 +42,27 @@ export function Navigation() {
 
   const toggleTheme = () => {
     const html = document.documentElement
-    const currentTheme = html.style.colorScheme
-    const newTheme = currentTheme === "dark" ? "light" : "dark"
-    html.style.colorScheme = newTheme
-    setIsDarkMode(newTheme === "dark")
+    if (html.classList.contains('dark')) {
+      html.classList.remove('dark')
+      localStorage.setItem('theme', 'light')
+      setIsDarkMode(false)
+    } else {
+      html.classList.add('dark')
+      localStorage.setItem('theme', 'dark')
+      setIsDarkMode(true)
+    }
   }
+
+  // Check for saved theme preference on mount
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme')
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      document.documentElement.classList.add('dark')
+      setIsDarkMode(true)
+    }
+  }, [])
 
   return (
     <motion.header
@@ -88,8 +104,21 @@ export function Navigation() {
                   </Link>
                 </motion.div>
               ))}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleTheme}
+                className="ml-2"
+                aria-label="Toggle theme"
+              >
+                {isDarkMode ? (
+                  <Sun className="h-5 w-5" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
+              </Button>
               <Link href="/admin/login">
-                <Button variant="ghost" size="sm" className="ml-2">
+                <Button variant="ghost" size="sm">
                   <Shield className="h-4 w-4 mr-2" />
                   Admin
                 </Button>
@@ -99,6 +128,18 @@ export function Navigation() {
 
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+            >
+              {isDarkMode ? (
+                <Sun className="h-5 w-5" />
+              ) : (
+                <Moon className="h-5 w-5" />
+              )}
+            </Button>
             <Button
               variant="ghost"
               size="icon"
