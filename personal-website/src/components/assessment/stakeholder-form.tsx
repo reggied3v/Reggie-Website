@@ -30,7 +30,7 @@ export function StakeholderForm({ data, updateData }: StakeholderFormProps) {
           6. Stakeholder Commitment Level: {data.stakeholderCommitment || 3}
         </Label>
         <p className="text-sm text-muted-foreground">
-          "Our key stakeholders actively participate in Sprint Reviews and provide timely feedback"
+          &quot;Our key stakeholders actively participate in Sprint Reviews and provide timely feedback&quot;
         </p>
         <input
           type="range"

@@ -5,10 +5,10 @@ import autoTable from 'jspdf-autotable'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const meetingId = params.id
+    const { id: meetingId } = await params
     const supabase = createAdminClient()
 
     // Fetch meeting data
@@ -71,10 +71,10 @@ function generatePDF(
   const insights = meeting.insights || {}
 
   // Brand colors matching website
-  const brandOrange = [255, 107, 53] // #FF6B35
-  const darkGray = [51, 51, 51] // #333333
-  const lightGray = [229, 229, 229] // #E5E5E5
-  const mutedGray = [102, 102, 102] // #666666
+  const brandOrange: [number, number, number] = [255, 107, 53] // #FF6B35
+  const darkGray: [number, number, number] = [51, 51, 51] // #333333
+  const lightGray: [number, number, number] = [229, 229, 229] // #E5E5E5
+  const mutedGray: [number, number, number] = [102, 102, 102] // #666666
 
   let yPosition = 20
 

@@ -128,7 +128,7 @@ export function ContactForm({ data, updateData }: ContactFormProps) {
                 className="w-4 h-4 mt-1 text-accent bg-input border-border rounded focus:ring-accent"
               />
               <span className="text-sm text-foreground">
-                I'd like to receive occasional insights and resources about Agile coaching
+                I&apos;d like to receive occasional insights and resources about Agile coaching
               </span>
             </label>
           </div>
@@ -138,7 +138,7 @@ export function ContactForm({ data, updateData }: ContactFormProps) {
       <div className="bg-accent/10 border border-accent/30 rounded-lg p-6">
         <h3 className="text-lg font-bold text-foreground mb-2">Ready to Get Your Results?</h3>
         <p className="text-sm text-muted-foreground mb-4">
-          Once you submit, you'll receive:
+          Once you submit, you&apos;ll receive:
         </p>
         <ul className="space-y-2 text-sm text-muted-foreground">
           <li className="flex items-start">
@@ -151,7 +151,7 @@ export function ContactForm({ data, updateData }: ContactFormProps) {
           </li>
           <li className="flex items-start">
             <span className="text-accent mr-2">✓</span>
-            <span>Actionable next steps tailored to your team's context</span>
+            <span>Actionable next steps tailored to your team&apos;s context</span>
           </li>
           <li className="flex items-start">
             <span className="text-accent mr-2">✓</span>

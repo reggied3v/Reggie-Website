@@ -275,7 +275,7 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
       {/* Blockers */}
       <div className="space-y-2">
         <Label className="text-base font-medium">Blockers / Impediments</Label>
-        <p className="text-sm text-muted-foreground">What's slowing the team down?</p>
+        <p className="text-sm text-muted-foreground">What&apos;s slowing the team down?</p>
         {notes.blockers.map((blocker, index) => (
           <div key={index} className="space-y-2 p-3 border border-border rounded-lg">
             <input

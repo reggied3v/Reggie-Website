@@ -144,7 +144,7 @@ export default function LoginPage() {
                     className="text-sm text-accent hover:underline"
                   >
                     {mode === 'login'
-                      ? "Don't have an account? Sign up"
+                      ? "Don&apos;t have an account? Sign up"
                       : "Already have an account? Sign in"}
                   </button>
                 </div>
@@ -159,7 +159,7 @@ export default function LoginPage() {
               {mode === 'signup' && (
                 <div className="mt-6 p-4 bg-accent/5 border border-accent/20 rounded-lg">
                   <h4 className="font-semibold text-foreground mb-2 text-sm">
-                    What you'll get:
+                    What you&apos;ll get:
                   </h4>
                   <ul className="space-y-1 text-sm text-muted-foreground">
                     <li>✓ 14-day free trial</li>

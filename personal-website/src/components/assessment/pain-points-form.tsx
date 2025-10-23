@@ -89,7 +89,7 @@ export function PainPointsForm({ data, updateData }: PainPointsFormProps) {
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <p className="text-sm text-foreground">
-                We struggle to differentiate between 'figuring things out' vs 'executing known work'
+                We struggle to differentiate between &apos;figuring things out&apos; vs &apos;executing known work&apos;
               </p>
               <span className="text-accent font-medium">{data.workChallenges?.discoveryVsExecution || 3}</span>
             </div>
@@ -273,14 +273,14 @@ export function PainPointsForm({ data, updateData }: PainPointsFormProps) {
           15. What do you want to improve? *
         </Label>
         <p className="text-sm text-muted-foreground">
-          Describe the top 2-3 things you'd like to improve about your team's way of working (750 characters max)
+          Describe the top 2-3 things you&apos;d like to improve about your team&apos;s way of working (750 characters max)
         </p>
         <textarea
           value={data.improvementGoals || ""}
           onChange={(e) => updateData({ improvementGoals: e.target.value })}
           maxLength={750}
           rows={6}
-          placeholder="Describe what you'd like to improve..."
+          placeholder="Describe what you&apos;d like to improve..."
           className="w-full px-4 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent resize-none"
           required
         />

@@ -336,7 +336,7 @@ async function sendAnalysisEmail(meetingId: string, teamId: string, analysis: an
     }
 
     // Render email HTML
-    const emailHtml = render(
+    const emailHtml = await render(
       MeetingAnalysisEmail({
         teamName: team.name,
         meetingType: meetingTypeNames[meeting.meeting_type] || meeting.meeting_type,

@@ -261,7 +261,7 @@ export const MeetingAnalysisEmail = ({
 
         {positiveObservations.length > 0 && (
           <div className="section">
-            <div className="section-title">✅ What's Working Well</div>
+            <div className="section-title">✅ What&apos;s Working Well</div>
             <ul className="list">
               {positiveObservations.map((observation, index) => (
                 <li key={index} className="list-item positive-item">{observation}</li>

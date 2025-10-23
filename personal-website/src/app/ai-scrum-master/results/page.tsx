@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { useSearchParams } from "next/navigation"
+
+export const dynamic = 'force-dynamic'
 import { motion } from "framer-motion"
 import { Navigation } from "@/components/layout/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -76,7 +78,7 @@ const generateMockRecommendations = () => {
         priority: "Medium",
         category: "Scope Management",
         title: "Create Sprint Goal Contract",
-        description: "To address constantly changing priorities, establish a 'Sprint Goal Contract' that protects the team's focus during the sprint while allowing flexibility for true emergencies.",
+        description: "To address constantly changing priorities, establish a 'Sprint Goal Contract' that protects the team&apos;s focus during the sprint while allowing flexibility for true emergencies.",
         actionSteps: [
           "Define Sprint Goal at Planning with clear success criteria",
           "Create 'Definition of Emergency' with stakeholders",
@@ -222,7 +224,7 @@ export default function ResultsPage() {
                 Analyzing Your Assessment...
               </h2>
               <p className="text-muted-foreground">
-                Our AI is generating personalized recommendations based on your team's context
+                Our AI is generating personalized recommendations based on your team&apos;s context
               </p>
             </div>
           </div>
@@ -251,7 +253,7 @@ export default function ResultsPage() {
               Your Agile Maturity Report
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Based on your team's assessment, here are personalized recommendations to improve your Scrum practices
+              Based on your team&apos;s assessment, here are personalized recommendations to improve your Scrum practices
             </p>
           </motion.div>
 
@@ -543,7 +545,7 @@ export default function ResultsPage() {
                 </div>
 
                 <div className="bg-card/50 backdrop-blur border border-border rounded-lg p-6 mb-8">
-                  <h4 className="font-semibold text-foreground mb-4">What You'll Get:</h4>
+                  <h4 className="font-semibold text-foreground mb-4">What You&apos;ll Get:</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {[
                       "Meeting-by-meeting AI analysis",
@@ -600,7 +602,7 @@ export default function ResultsPage() {
                 </h3>
                 <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
                   I also offer personalized coaching sessions to help implement these recommendations with your team.
-                  Let's discuss how I can support your Agile transformation journey.
+                  Let&apos;s discuss how I can support your Agile transformation journey.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button size="lg" asChild>
