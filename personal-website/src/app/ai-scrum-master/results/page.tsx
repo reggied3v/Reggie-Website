@@ -51,8 +51,8 @@ const generateMockRecommendations = () => {
         ],
         expectedImpact: "Reduce mid-sprint blockers by 40% and improve sprint predictability",
         resources: [
-          "Mike Cohn's User Story guide",
-          "INVEST criteria checklist"
+          { title: "Mike Cohn's User Story guide", url: "https://www.mountaingoatsoftware.com/agile/user-stories" },
+          { title: "INVEST criteria checklist", url: "https://agileforall.com/resources/how-to-split-a-user-story/" }
         ]
       },
       {
@@ -68,8 +68,8 @@ const generateMockRecommendations = () => {
         ],
         expectedImpact: "Reduce waiting time for decisions from days to hours",
         resources: [
-          "Roman Pichler's Product Owner patterns",
-          "Delegation Poker from Management 3.0"
+          { title: "Roman Pichler's Product Owner patterns", url: "https://www.romanpichler.com/blog/10-tips-product-owner-scrum/" },
+          { title: "Delegation Poker from Management 3.0", url: "https://management30.com/practice/delegation-poker/" }
         ]
       },
       {
@@ -85,8 +85,8 @@ const generateMockRecommendations = () => {
         ],
         expectedImpact: "Increase sprint goal achievement from ~50% to 80%+",
         resources: [
-          "Scrum Guide on Sprint Goals",
-          "Henrik Kniberg's 'Scope Change' patterns"
+          { title: "Scrum Guide on Sprint Goals", url: "https://scrumguides.org/scrum-guide.html#sprint-goal" },
+          { title: "Henrik Kniberg's Scope Change patterns", url: "https://blog.crisp.se/2013/02/25/henrikkniberg/spotify-engineering-culture-part-1" }
         ]
       },
       {
@@ -102,8 +102,8 @@ const generateMockRecommendations = () => {
         ],
         expectedImpact: "Improve team awareness scores and reduce coordination overhead",
         resources: [
-          "Atlassian's Remote Work playbook",
-          "Distributed Scrum patterns"
+          { title: "Atlassian's Remote Work playbook", url: "https://www.atlassian.com/blog/teamwork/remote-team-best-practices" },
+          { title: "Distributed Scrum patterns", url: "https://less.works/less/framework/distributed-scrum.html" }
         ]
       },
       {
@@ -119,8 +119,8 @@ const generateMockRecommendations = () => {
         ],
         expectedImpact: "Increase open discussion scores and team engagement",
         resources: [
-          "The Five Dysfunctions of a Team (Lencioni)",
-          "Retromat.org for retrospective ideas"
+          { title: "The Five Dysfunctions of a Team", url: "https://www.tablegroup.com/product/dysfunctions/" },
+          { title: "Retromat - Retrospective ideas", url: "https://retromat.org/" }
         ]
       }
     ],
@@ -407,10 +407,17 @@ export default function ResultsPage() {
                             Recommended Resources
                           </h4>
                           <ul className="space-y-1">
-                            {rec.resources.map((resource: string, resIndex: number) => (
-                              <li key={resIndex} className="text-sm text-muted-foreground flex items-center gap-2">
-                                <ArrowRight className="w-3 h-3 text-accent" />
-                                {resource}
+                            {rec.resources.map((resource: any, resIndex: number) => (
+                              <li key={resIndex} className="text-sm flex items-center gap-2">
+                                <ArrowRight className="w-3 h-3 text-accent flex-shrink-0" />
+                                <a
+                                  href={resource.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-accent hover:text-accent/80 hover:underline transition-colors"
+                                >
+                                  {resource.title}
+                                </a>
                               </li>
                             ))}
                           </ul>
