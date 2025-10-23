@@ -99,6 +99,7 @@ export function StakeholderForm({ data, updateData }: StakeholderFormProps) {
           rows={4}
           placeholder="Describe what success looks like..."
           className="w-full px-4 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent resize-none"
+          required
         />
         <div className="text-xs text-muted-foreground text-right">
           {(data.successDefinition || "").length}/500 characters

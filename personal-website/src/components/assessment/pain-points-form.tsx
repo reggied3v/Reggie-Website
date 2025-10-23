@@ -282,6 +282,7 @@ export function PainPointsForm({ data, updateData }: PainPointsFormProps) {
           rows={6}
           placeholder="Describe what you'd like to improve..."
           className="w-full px-4 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent resize-none"
+          required
         />
         <div className="text-xs text-muted-foreground text-right">
           {(data.improvementGoals || "").length}/750 characters

@@ -156,9 +156,22 @@ export default function ResultsPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    // Get results from sessionStorage
+    const storedResults = sessionStorage.getItem('assessmentResults')
+    const storedData = sessionStorage.getItem('assessmentData')
+
     // Simulate AI processing delay
     const timer = setTimeout(() => {
-      setResults(generateMockRecommendations())
+      const mockResults = generateMockRecommendations()
+
+      // If we have real results from the database, use them
+      if (storedResults) {
+        const realResults = JSON.parse(storedResults)
+        mockResults.overallScore = realResults.overallScore
+        mockResults.maturityLevel = realResults.maturityLevel
+      }
+
+      setResults(mockResults)
       setLoading(false)
     }, 2000)
 

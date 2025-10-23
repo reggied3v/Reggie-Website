@@ -107,18 +107,37 @@ export function AssessmentForm() {
   }
 
   const handleSubmit = async () => {
-    // Store assessment data in sessionStorage for now (will use API later)
-    sessionStorage.setItem('assessmentData', JSON.stringify(formData))
+    try {
+      // Save to database
+      const response = await fetch('/api/assessment/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
 
-    // TODO: When Claude API is ready, send data to API endpoint
-    // const response = await fetch('/api/assessment/submit', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(formData)
-    // })
+      if (!response.ok) {
+        const error = await response.json()
+        console.error('Failed to submit assessment:', error)
+        alert('Failed to submit assessment. Please try again.')
+        return
+      }
 
-    // Navigate to results page
-    router.push('/ai-scrum-master/results')
+      const result = await response.json()
+
+      // Store assessment ID and results in sessionStorage for results page
+      sessionStorage.setItem('assessmentId', result.assessmentId)
+      sessionStorage.setItem('assessmentData', JSON.stringify(formData))
+      sessionStorage.setItem('assessmentResults', JSON.stringify({
+        overallScore: result.overallScore,
+        maturityLevel: result.maturityLevel
+      }))
+
+      // Navigate to results page
+      router.push('/ai-scrum-master/results')
+    } catch (error) {
+      console.error('Error submitting assessment:', error)
+      alert('An error occurred while submitting your assessment. Please try again.')
+    }
   }
 
   return (
