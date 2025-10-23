@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase-admin'
 import Anthropic from '@anthropic-ai/sdk'
+import { Resend } from 'resend'
+import { render } from '@react-email/render'
+import MeetingAnalysisEmail from '@/emails/meeting-analysis-email'
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY || ''
 })
+
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(request: NextRequest) {
   try {
@@ -155,6 +160,10 @@ async function analyzeMeeting(
 
     console.log('Meeting analysis completed:', meetingId)
 
+    // Send email notification
+    await sendAnalysisEmail(meetingId, teamId, analysis)
+      .catch(error => console.error('Failed to send email:', error))
+
   } catch (error) {
     console.error('AI analysis failed:', error)
 
@@ -270,4 +279,102 @@ Provide your analysis as valid JSON only. Do not include markdown code blocks or
 
 TRANSCRIPT:
 ${transcript}`
+}
+
+// Send email notification with analysis results
+async function sendAnalysisEmail(meetingId: string, teamId: string, analysis: any) {
+  try {
+    const supabase = createAdminClient()
+
+    // Get meeting details
+    const { data: meeting } = await supabase
+      .from('meetings')
+      .select('*, uploaded_by')
+      .eq('id', meetingId)
+      .single()
+
+    if (!meeting) return
+
+    // Get team details
+    const { data: team } = await supabase
+      .from('teams')
+      .select('*')
+      .eq('id', teamId)
+      .single()
+
+    if (!team) return
+
+    // Get user email
+    const { data: userData } = await supabase.auth.admin.getUserById(meeting.uploaded_by)
+    if (!userData?.user?.email) return
+
+    const userEmail = userData.user.email
+
+    // Get action items
+    const { data: actionItems } = await supabase
+      .from('action_items')
+      .select('*')
+      .eq('meeting_id', meetingId)
+      .limit(5)
+
+    // Get coaching suggestions
+    const { data: coachingSuggestions } = await supabase
+      .from('coaching_suggestions')
+      .select('*')
+      .eq('meeting_id', meetingId)
+      .limit(3)
+
+    const meetingUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/dashboard/meetings/${meetingId}`
+
+    const meetingTypeNames: Record<string, string> = {
+      'standup': 'Daily Standup',
+      'planning': 'Sprint Planning',
+      'review': 'Sprint Review',
+      'retrospective': 'Retrospective',
+      'refinement': 'Backlog Refinement',
+      'other': 'Meeting'
+    }
+
+    // Render email HTML
+    const emailHtml = render(
+      MeetingAnalysisEmail({
+        teamName: team.name,
+        meetingType: meetingTypeNames[meeting.meeting_type] || meeting.meeting_type,
+        meetingDate: meeting.meeting_date,
+        overallHealthScore: meeting.overall_health_score || 0,
+        engagementScore: meeting.engagement_score || 0,
+        transparencyScore: meeting.transparency_score || 0,
+        collaborationScore: meeting.collaboration_score || 0,
+        summary: analysis.summary || '',
+        keyInsights: analysis.key_insights || [],
+        positiveObservations: analysis.positive_observations || [],
+        areasForImprovement: analysis.areas_for_improvement || [],
+        actionItems: (actionItems || []).map((item: any) => ({
+          title: item.title,
+          assignedTo: item.assigned_to,
+          priority: item.priority
+        })),
+        coachingSuggestions: (coachingSuggestions || []).map((suggestion: any) => ({
+          category: suggestion.category,
+          title: suggestion.title,
+          description: suggestion.description,
+          priority: suggestion.priority
+        })),
+        meetingUrl
+      })
+    )
+
+    // Send email via Resend
+    await resend.emails.send({
+      from: 'AI Scrum Master <noreply@yourdomain.com>', // Update with your domain
+      to: userEmail,
+      subject: `Meeting Analysis Complete: ${team.name} ${meetingTypeNames[meeting.meeting_type]}`,
+      html: emailHtml
+    })
+
+    console.log('Email sent successfully to:', userEmail)
+  } catch (error) {
+    console.error('Error sending email:', error)
+    throw error
+  }
 }

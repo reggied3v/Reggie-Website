@@ -16,7 +16,9 @@ import {
   MessageSquare,
   Users,
   Target,
-  FileText
+  FileText,
+  Download,
+  Mail
 } from "lucide-react"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase-client"
@@ -31,10 +33,34 @@ export default function MeetingDetailPage() {
   const [actionItems, setActionItems] = useState<any[]>([])
   const [coachingSuggestions, setCoachingSuggestions] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [downloadingPDF, setDownloadingPDF] = useState(false)
 
   useEffect(() => {
     loadMeetingData()
   }, [meetingId])
+
+  const handleDownloadPDF = async () => {
+    setDownloadingPDF(true)
+    try {
+      const response = await fetch(`/api/meetings/${meetingId}/pdf`)
+      if (!response.ok) throw new Error('Failed to download PDF')
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `meeting-analysis-${meetingId}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+    } catch (error) {
+      console.error('Error downloading PDF:', error)
+      alert('Failed to download PDF. Please try again.')
+    } finally {
+      setDownloadingPDF(false)
+    }
+  }
 
   const loadMeetingData = async () => {
     const supabase = createClient()
@@ -179,6 +205,19 @@ export default function MeetingDetailPage() {
                   )}
                 </div>
               </div>
+
+              {meeting.analysis_status === 'completed' && (
+                <div className="flex gap-2">
+                  <Button
+                    onClick={handleDownloadPDF}
+                    disabled={downloadingPDF}
+                    variant="outline"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    {downloadingPDF ? 'Generating...' : 'Download PDF'}
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
 
