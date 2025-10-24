@@ -1,6 +1,7 @@
 "use client"
 
 import { CheckCircle2 } from "lucide-react"
+import { Progress } from "@/components/ui/progress"
 
 interface Step {
   number: number
@@ -14,8 +15,19 @@ interface StepIndicatorProps {
 }
 
 export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
+  const progressPercentage = ((currentStep - 1) / steps.length) * 100
+
   return (
-    <div className="relative">
+    <div className="relative space-y-4">
+      {/* Progress bar */}
+      <div className="space-y-2">
+        <div className="flex justify-between text-sm text-muted-foreground">
+          <span>Step {currentStep} of {steps.length}</span>
+          <span>{Math.round(progressPercentage)}% Complete</span>
+        </div>
+        <Progress value={progressPercentage} className="h-2" />
+      </div>
+
       <div className="flex items-center justify-between">
         {steps.map((step, index) => {
           const isCompleted = currentStep > step.number

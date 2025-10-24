@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { Plus, X } from "lucide-react"
 
 interface StructuredNotesFormProps {
@@ -47,7 +49,7 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
         <p className="text-sm text-muted-foreground">Who attended this meeting?</p>
         {notes.participants.map((participant, index) => (
           <div key={index} className="flex gap-2">
-            <input
+            <Input
               type="text"
               value={participant}
               onChange={(e) => {
@@ -56,7 +58,7 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
                 updateNotes({ participants: updated })
               }}
               placeholder="Name or role"
-              className="flex-1 px-3 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
+              className="flex-1"
             />
             <Button
               type="button"
@@ -88,7 +90,7 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
         <p className="text-sm text-muted-foreground">What did team members share?</p>
         {notes.teamUpdates.map((update, index) => (
           <div key={index} className="space-y-2 p-3 border border-border rounded-lg">
-            <input
+            <Input
               type="text"
               value={update.member}
               onChange={(e) => {
@@ -97,9 +99,8 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
                 updateNotes({ teamUpdates: updated })
               }}
               placeholder="Team member name"
-              className="w-full px-3 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
             />
-            <textarea
+            <Textarea
               value={update.update}
               onChange={(e) => {
                 const updated = [...notes.teamUpdates]
@@ -108,7 +109,6 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
               }}
               placeholder="What they shared (e.g., completed work, current work, blockers)"
               rows={3}
-              className="w-full px-3 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent resize-none"
             />
             <Button
               type="button"
@@ -142,7 +142,7 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
           <p className="text-sm text-muted-foreground">What topics were discussed?</p>
           {notes.discussionTopics.map((topic, index) => (
             <div key={index} className="flex gap-2">
-              <textarea
+              <Textarea
                 value={topic}
                 onChange={(e) => {
                   const updated = [...notes.discussionTopics]
@@ -151,7 +151,7 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
                 }}
                 placeholder="Topic and key points discussed"
                 rows={2}
-                className="flex-1 px-3 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent resize-none"
+                className="flex-1"
               />
               <Button
                 type="button"
@@ -184,7 +184,7 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
         <p className="text-sm text-muted-foreground">What decisions were reached?</p>
         {notes.decisionsMade.map((decision, index) => (
           <div key={index} className="space-y-2 p-3 border border-border rounded-lg">
-            <input
+            <Input
               type="text"
               value={decision.decision}
               onChange={(e) => {
@@ -193,9 +193,8 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
                 updateNotes({ decisionsMade: updated })
               }}
               placeholder="The decision"
-              className="w-full px-3 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
             />
-            <textarea
+            <Textarea
               value={decision.rationale}
               onChange={(e) => {
                 const updated = [...notes.decisionsMade]
@@ -204,7 +203,6 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
               }}
               placeholder="Why this decision was made"
               rows={2}
-              className="w-full px-3 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent resize-none"
             />
             <Button
               type="button"
@@ -237,7 +235,7 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
         <p className="text-sm text-muted-foreground">What questions need to be answered?</p>
         {notes.openQuestions.map((question, index) => (
           <div key={index} className="flex gap-2">
-            <input
+            <Input
               type="text"
               value={question}
               onChange={(e) => {
@@ -246,7 +244,7 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
                 updateNotes({ openQuestions: updated })
               }}
               placeholder="Unresolved question"
-              className="flex-1 px-3 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
+              className="flex-1"
             />
             <Button
               type="button"
@@ -278,7 +276,7 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
         <p className="text-sm text-muted-foreground">What&apos;s slowing the team down?</p>
         {notes.blockers.map((blocker, index) => (
           <div key={index} className="space-y-2 p-3 border border-border rounded-lg">
-            <input
+            <Input
               type="text"
               value={blocker.blocker}
               onChange={(e) => {
@@ -287,9 +285,8 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
                 updateNotes({ blockers: updated })
               }}
               placeholder="The blocker or impediment"
-              className="w-full px-3 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
             />
-            <input
+            <Input
               type="text"
               value={blocker.impact}
               onChange={(e) => {
@@ -298,7 +295,6 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
                 updateNotes({ blockers: updated })
               }}
               placeholder="Impact on the team"
-              className="w-full px-3 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
             />
             <Button
               type="button"
@@ -331,7 +327,7 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
         <p className="text-sm text-muted-foreground">What needs to be done and by whom?</p>
         {notes.actionItems.map((item, index) => (
           <div key={index} className="space-y-2 p-3 border border-border rounded-lg">
-            <input
+            <Input
               type="text"
               value={item.title}
               onChange={(e) => {
@@ -340,10 +336,9 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
                 updateNotes({ actionItems: updated })
               }}
               placeholder="What needs to be done"
-              className="w-full px-3 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
             />
             <div className="grid grid-cols-2 gap-2">
-              <input
+              <Input
                 type="text"
                 value={item.assignedTo}
                 onChange={(e) => {
@@ -352,9 +347,8 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
                   updateNotes({ actionItems: updated })
                 }}
                 placeholder="Assigned to"
-                className="px-3 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
               />
-              <input
+              <Input
                 type="date"
                 value={item.dueDate}
                 onChange={(e) => {
@@ -362,7 +356,6 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
                   updated[index].dueDate = e.target.value
                   updateNotes({ actionItems: updated })
                 }}
-                className="px-3 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
               />
             </div>
             <Button
@@ -420,13 +413,12 @@ export function StructuredNotesForm({ meetingType, onNotesChange }: StructuredNo
           Additional Notes (Optional)
         </Label>
         <p className="text-sm text-muted-foreground">Anything else worth noting?</p>
-        <textarea
+        <Textarea
           id="additionalNotes"
           value={notes.additionalNotes}
           onChange={(e) => updateNotes({ additionalNotes: e.target.value })}
           placeholder="Any additional context, observations, or notes..."
           rows={4}
-          className="w-full px-3 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent resize-none"
         />
       </div>
     </div>
