@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, ArrowLeft } from "lucide-react"
+import { ArrowRight, ArrowLeft, Loader2 } from "lucide-react"
 import { StepIndicator } from "./step-indicator"
 import { TeamContextForm } from "./team-context-form"
 import { StakeholderForm } from "./stakeholder-form"
@@ -67,6 +67,7 @@ const STEPS = [
 export function AssessmentForm() {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState<Partial<AssessmentData>>({
     teamMaturity: 3,
     currentTools: [],
@@ -107,6 +108,7 @@ export function AssessmentForm() {
   }
 
   const handleSubmit = async () => {
+    setIsSubmitting(true)
     try {
       // Save to database
       const response = await fetch('/api/assessment/submit', {
@@ -119,6 +121,7 @@ export function AssessmentForm() {
         const error = await response.json()
         console.error('Failed to submit assessment:', error)
         alert('Failed to submit assessment. Please try again.')
+        setIsSubmitting(false)
         return
       }
 
@@ -137,6 +140,7 @@ export function AssessmentForm() {
     } catch (error) {
       console.error('Error submitting assessment:', error)
       alert('An error occurred while submitting your assessment. Please try again.')
+      setIsSubmitting(false)
     }
   }
 
@@ -185,6 +189,7 @@ export function AssessmentForm() {
             <Button
               onClick={handleNext}
               className="flex items-center"
+              disabled={isSubmitting}
             >
               Next
               <ArrowRight className="w-4 h-4 ml-2" />
@@ -193,9 +198,19 @@ export function AssessmentForm() {
             <Button
               onClick={handleSubmit}
               className="flex items-center"
+              disabled={isSubmitting}
             >
-              Get My Results
-              <ArrowRight className="w-4 h-4 ml-2" />
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Analyzing Your Responses...
+                </>
+              ) : (
+                <>
+                  Get My Results
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </>
+              )}
             </Button>
           )}
         </div>
