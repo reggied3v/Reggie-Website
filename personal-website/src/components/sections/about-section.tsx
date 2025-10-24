@@ -31,7 +31,7 @@ const skills = [
     title: "Digital Transformation",
     description: "Leading large-scale digitalization initiatives, product launches, and customer care support.",
     technologies: ["Product Management", "Customer Care", "Strategy", "Leadership"],
-    color: "accent"
+    color: "accent-green"
   }
 ]
 

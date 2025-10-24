@@ -25,6 +25,10 @@
   --accent-orange-foreground: #1a1d23;
   --accent-orange-rgb: 255, 183, 77;
 
+  --accent-green: #66BB6A;
+  --accent-green-foreground: #1a1d23;
+  --accent-green-rgb: 102, 187, 106;
+
   --destructive: #FF5252;
   --border: #5a5f69;
   --input: #3a3f49;
@@ -69,6 +73,8 @@
   --color-accent-blue-foreground: var(--accent-blue-foreground);
   --color-accent-orange: var(--accent-orange);
   --color-accent-orange-foreground: var(--accent-orange-foreground);
+  --color-accent-green: var(--accent-green);
+  --color-accent-green-foreground: var(--accent-green-foreground);
   --color-destructive: var(--destructive);
   --color-border: var(--border);
   --color-input: var(--input);
