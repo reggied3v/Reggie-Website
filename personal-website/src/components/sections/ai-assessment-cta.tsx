@@ -116,7 +116,7 @@ export function AIAssessmentCTA() {
                       <div className="text-sm text-muted-foreground">Teams Scaled</div>
                     </Card>
                     <Card className="p-6 bg-card/50 backdrop-blur">
-                      <div className="text-4xl font-bold text-accent mb-2">19+</div>
+                      <div className="text-4xl font-bold text-accent mb-2">20+</div>
                       <div className="text-sm text-muted-foreground">Years Experience</div>
                     </Card>
                     <Card className="p-6 bg-card/50 backdrop-blur">

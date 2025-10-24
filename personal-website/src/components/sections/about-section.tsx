@@ -31,7 +31,7 @@ const skills = [
     title: "Digital Transformation",
     description: "Leading large-scale digitalization initiatives, product launches, and customer care support.",
     technologies: ["Product Management", "Customer Care", "Strategy", "Leadership"],
-    color: "accent"
+    color: "accent-green"
   }
 ]
 
@@ -103,38 +103,6 @@ export function AboutSection() {
             </motion.div>
           ))}
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="mt-16 text-center"
-        >
-          <Card className="max-w-4xl mx-auto glass">
-            <CardHeader>
-              <CardTitle className="text-2xl">My Journey</CardTitle>
-            </CardHeader>
-            <CardContent className="text-left">
-              <p className="text-muted-foreground mb-4">
-                As Digital Delivery Lead & Scrum Master at Bosch, I led the end-to-end launch of a
-                smart information hub, scaling it from concept to 20,000+ users in under two years.
-                I defined product-market fit, established OKRs and KPIs, and implemented a repeatable
-                go-to-market strategy—resulting in our first external sale (RBHU, 5,000 licenses) within two months.
-              </p>
-              <p className="text-muted-foreground mb-4">
-                I&apos;ve served as Global Scrum Master and Agile Coach across multiple workstreams, building
-                high-performing, cross-functional teams across countries. I drive strategic decisions—from
-                budget allocation and team composition to course corrections—while fostering a culture of
-                collaboration, growth, and innovation.
-              </p>
-              <p className="text-muted-foreground">
-                Known for fostering collaboration, leading by example, and promoting sustainable team
-                success through Agile principles and continuous improvement.
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
       </div>
     </section>
   )
