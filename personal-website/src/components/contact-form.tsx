@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Mail } from "lucide-react"
+import { Mail, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -110,8 +110,17 @@ export function ContactForm() {
       </div>
 
       <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-        <Mail className="w-5 h-5 mr-2" />
-        {isSubmitting ? 'Sending...' : 'Send Message'}
+        {isSubmitting ? (
+          <>
+            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+            Sending Your Message...
+          </>
+        ) : (
+          <>
+            <Mail className="w-5 h-5 mr-2" />
+            Send Message
+          </>
+        )}
       </Button>
     </form>
   )
