@@ -1,13 +1,13 @@
 "use client"
 
 import { useEffect, useState, Suspense } from "react"
-import { useSearchParams } from "next/navigation"
 
 export const dynamic = 'force-dynamic'
 import { motion } from "framer-motion"
 import { Navigation } from "@/components/layout/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
   Download,
   Mail,
@@ -153,14 +153,12 @@ const generateMockRecommendations = () => {
 }
 
 function ResultsContent() {
-  const searchParams = useSearchParams()
   const [results, setResults] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     // Get results from sessionStorage
     const storedResults = sessionStorage.getItem('assessmentResults')
-    const storedData = sessionStorage.getItem('assessmentData')
 
     // Simulate AI processing delay
     const timer = setTimeout(() => {
@@ -211,21 +209,55 @@ function ResultsContent() {
       <div className="min-h-screen">
         <Navigation />
         <main className="pt-24 pb-16">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center py-20">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                className="inline-block mb-6"
-              >
-                <TrendingUp className="w-16 h-16 text-accent" />
-              </motion.div>
-              <h2 className="text-2xl font-bold text-foreground mb-4">
-                Analyzing Your Assessment...
-              </h2>
-              <p className="text-muted-foreground">
-                Our AI is generating personalized recommendations based on your team&apos;s context
-              </p>
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Header Skeleton */}
+            <div className="text-center mb-12">
+              <Skeleton className="h-12 w-96 mx-auto mb-4" />
+              <Skeleton className="h-6 w-64 mx-auto" />
+            </div>
+
+            {/* Summary Cards Skeleton */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              {[1, 2, 3].map((i) => (
+                <Card key={i}>
+                  <CardHeader>
+                    <Skeleton className="h-6 w-32 mb-2" />
+                  </CardHeader>
+                  <CardContent>
+                    <Skeleton className="h-16 w-16 rounded-full mb-4" />
+                    <Skeleton className="h-4 w-24" />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Recommendations Skeleton */}
+            <div className="space-y-6">
+              {[1, 2, 3].map((i) => (
+                <Card key={i}>
+                  <CardHeader>
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex-1">
+                        <Skeleton className="h-6 w-48 mb-2" />
+                        <Skeleton className="h-4 w-32 mb-3" />
+                        <Skeleton className="h-5 w-full mb-2" />
+                        <Skeleton className="h-5 w-3/4" />
+                      </div>
+                      <Skeleton className="h-6 w-16" />
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <Skeleton className="h-5 w-32 mb-2" />
+                      <div className="space-y-2">
+                        {[1, 2, 3].map((j) => (
+                          <Skeleton key={j} className="h-4 w-full" />
+                        ))}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </div>
         </main>

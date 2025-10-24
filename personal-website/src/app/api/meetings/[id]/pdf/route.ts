@@ -215,7 +215,7 @@ function generatePDF(
     doc.setTextColor(...darkGray)
     doc.setFont('helvetica', 'normal')
 
-    insights.key_insights.forEach((insight: string, index: number) => {
+    insights.key_insights.forEach((insight: string) => {
       if (yPosition > 270) {
         doc.addPage()
         yPosition = 20
@@ -367,7 +367,7 @@ function generatePDF(
 
     yPosition += 15
 
-    coachingSuggestions.forEach((suggestion, index) => {
+    coachingSuggestions.forEach((suggestion) => {
       if (yPosition > 250) {
         doc.addPage()
         yPosition = 20

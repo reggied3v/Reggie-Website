@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation"
 import { Navigation } from "@/components/layout/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
   ArrowLeft,
   Calendar,
@@ -17,8 +18,7 @@ import {
   Users,
   Target,
   FileText,
-  Download,
-  Mail
+  Download
 } from "lucide-react"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase-client"
@@ -37,6 +37,7 @@ export default function MeetingDetailPage() {
 
   useEffect(() => {
     loadMeetingData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [meetingId])
 
   const handleDownloadPDF = async () => {
@@ -148,8 +149,87 @@ export default function MeetingDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-muted-foreground">Loading meeting...</p>
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <main className="pt-24 pb-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Header Skeleton */}
+            <div className="mb-8">
+              <Skeleton className="h-10 w-32 mb-4" />
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <Skeleton className="h-10 w-96 mb-2" />
+                  <Skeleton className="h-5 w-64" />
+                </div>
+                <Skeleton className="h-10 w-40" />
+              </div>
+            </div>
+
+            {/* Info Cards Skeleton */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+              {[1, 2, 3, 4].map((i) => (
+                <Card key={i}>
+                  <CardHeader className="flex flex-row items-center space-y-0 pb-2">
+                    <Skeleton className="h-4 w-4 mr-2" />
+                    <Skeleton className="h-4 w-24" />
+                  </CardHeader>
+                  <CardContent>
+                    <Skeleton className="h-6 w-20" />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Main Content Skeleton */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2 space-y-6">
+                {[1, 2, 3].map((i) => (
+                  <Card key={i}>
+                    <CardHeader>
+                      <div className="flex items-center gap-2 mb-2">
+                        <Skeleton className="h-5 w-5" />
+                        <Skeleton className="h-6 w-48" />
+                      </div>
+                      <Skeleton className="h-4 w-64" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        {[1, 2, 3].map((j) => (
+                          <div key={j} className="flex gap-3">
+                            <Skeleton className="h-4 w-4 mt-1" />
+                            <Skeleton className="h-4 flex-1" />
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <Skeleton className="h-6 w-32 mb-2" />
+                    <Skeleton className="h-4 w-48" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {[1, 2, 3, 4].map((i) => (
+                        <div key={i} className="flex items-start gap-3 p-3 border border-border rounded-lg">
+                          <Skeleton className="h-4 w-4 mt-1" />
+                          <div className="flex-1">
+                            <Skeleton className="h-4 w-full mb-2" />
+                            <Skeleton className="h-3 w-20" />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </main>
       </div>
     )
   }

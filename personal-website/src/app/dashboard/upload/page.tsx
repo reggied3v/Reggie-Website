@@ -6,7 +6,7 @@ import { Navigation } from "@/components/layout/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { ArrowLeft, Upload, FileText, Calendar, ClipboardList } from "lucide-react"
+import { ArrowLeft, Upload, FileText, ClipboardList } from "lucide-react"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase-client"
 import { StructuredNotesForm } from "@/components/meetings/structured-notes-form"
@@ -28,6 +28,7 @@ export default function UploadPage() {
 
   useEffect(() => {
     loadTeams()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const loadTeams = async () => {
@@ -40,7 +41,7 @@ export default function UploadPage() {
       return
     }
 
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('teams')
       .select('*')
       .order('created_at', { ascending: false })

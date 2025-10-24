@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { Navigation } from "@/components/layout/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
 import { Upload, Users, TrendingUp, FileText, Calendar, LogOut } from "lucide-react"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase-client"
@@ -17,6 +18,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     checkAuth()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const checkAuth = async () => {
@@ -35,7 +37,7 @@ export default function DashboardPage() {
 
   const loadTeams = async () => {
     const supabase = createClient()
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('teams')
       .select('*')
       .order('created_at', { ascending: false })
@@ -53,8 +55,81 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-muted-foreground">Loading...</p>
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <main className="pt-24 pb-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Header Skeleton */}
+            <div className="flex justify-between items-start mb-8">
+              <div>
+                <Skeleton className="h-10 w-96 mb-2" />
+                <Skeleton className="h-5 w-64" />
+              </div>
+              <Skeleton className="h-10 w-24" />
+            </div>
+
+            {/* Quick Stats Skeleton */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+              {[1, 2, 3, 4].map((i) => (
+                <Card key={i}>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-4 w-4" />
+                  </CardHeader>
+                  <CardContent>
+                    <Skeleton className="h-8 w-12 mb-1" />
+                    <Skeleton className="h-3 w-24" />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Main Content Skeleton */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2 space-y-6">
+                <Card>
+                  <CardHeader>
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <Skeleton className="h-6 w-32 mb-2" />
+                        <Skeleton className="h-4 w-48" />
+                      </div>
+                      <Skeleton className="h-10 w-32" />
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {[1, 2, 3].map((i) => (
+                        <div key={i} className="flex items-center justify-between p-4 border border-border rounded-lg">
+                          <div className="flex items-center gap-4">
+                            <Skeleton className="w-10 h-10 rounded-full" />
+                            <div>
+                              <Skeleton className="h-5 w-32 mb-2" />
+                              <Skeleton className="h-4 w-24" />
+                            </div>
+                          </div>
+                          <Skeleton className="h-9 w-16" />
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <Skeleton className="h-6 w-40 mb-2" />
+                    <Skeleton className="h-4 w-32" />
+                  </CardHeader>
+                  <CardContent>
+                    <Skeleton className="h-11 w-full" />
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </main>
       </div>
     )
   }

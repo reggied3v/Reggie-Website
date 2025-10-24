@@ -91,7 +91,7 @@ export function Navigation() {
                   <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right">
+              <SheetContent>
                 <SheetHeader>
                   <SheetTitle>Navigation</SheetTitle>
                 </SheetHeader>

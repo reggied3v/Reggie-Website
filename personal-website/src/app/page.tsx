@@ -7,7 +7,6 @@ import { OfferingComparison } from "@/components/sections/offering-comparison"
 import { ProjectsSection } from "@/components/sections/projects-section"
 import { ContactSection } from "@/components/sections/contact-section"
 import { BuiltWithSection } from "@/components/sections/built-with-section"
-import { HomepageSidebar } from "@/components/homepage-sidebar"
 
 export default function Home() {
   return (
@@ -17,7 +16,6 @@ export default function Home() {
         <HeroSection />
         <AboutSection />
         <ProjectsSection />
-        <HomepageSidebar />
         <OfferingComparison />
         <AIAssessmentCTA />
         <AIScrumMasterSection />

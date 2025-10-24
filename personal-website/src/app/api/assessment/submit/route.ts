@@ -130,7 +130,6 @@ export async function POST(request: NextRequest) {
 // Simple scoring algorithm (can be enhanced later)
 function calculateOverallScore(data: any): number {
   let score = 0
-  const maxScore = 100
 
   // Team maturity (0-20 points)
   score += (data.teamMaturity / 5) * 20
