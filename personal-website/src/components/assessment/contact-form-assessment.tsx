@@ -2,6 +2,9 @@
 
 import { AssessmentData } from "./assessment-form"
 import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
 
 interface ContactFormProps {
   data: Partial<AssessmentData>
@@ -19,7 +22,7 @@ export function ContactForm({ data, updateData }: ContactFormProps) {
       {/* Question 16: Your Role */}
       <div className="space-y-3">
         <Label className="text-base font-medium">16. Your Role *</Label>
-        <div className="space-y-2">
+        <RadioGroup value={data.role} onValueChange={(value) => updateData({ role: value })}>
           {[
             { value: "scrum-master", label: "Scrum Master" },
             { value: "agile-coach", label: "Agile Coach" },
@@ -28,26 +31,19 @@ export function ContactForm({ data, updateData }: ContactFormProps) {
             { value: "manager", label: "Manager/Leader" },
             { value: "other", label: "Other" }
           ].map(option => (
-            <label key={option.value} className="flex items-center space-x-3 cursor-pointer">
-              <input
-                type="radio"
-                name="role"
-                value={option.value}
-                checked={data.role === option.value}
-                onChange={(e) => updateData({ role: e.target.value })}
-                className="w-4 h-4 text-accent bg-input border-border focus:ring-accent"
-              />
-              <span className="text-foreground">{option.label}</span>
-            </label>
+            <div key={option.value} className="flex items-center space-x-3">
+              <RadioGroupItem value={option.value} id={`role-${option.value}`} />
+              <Label htmlFor={`role-${option.value}`} className="font-normal cursor-pointer">
+                {option.label}
+              </Label>
+            </div>
           ))}
-        </div>
+        </RadioGroup>
         {data.role === "other" && (
-          <input
-            type="text"
+          <Input
             placeholder="Please specify..."
             value={data.roleOther || ""}
             onChange={(e) => updateData({ roleOther: e.target.value })}
-            className="w-full px-4 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
           />
         )}
       </div>
@@ -55,25 +51,20 @@ export function ContactForm({ data, updateData }: ContactFormProps) {
       {/* Question 17: Organization Context */}
       <div className="space-y-3">
         <Label className="text-base font-medium">17. Organization Context (optional)</Label>
-        <div className="space-y-2">
+        <RadioGroup value={data.organizationContext} onValueChange={(value) => updateData({ organizationContext: value })}>
           {[
             { value: "bosch", label: "Working at Bosch" },
             { value: "external", label: "External organization" },
             { value: "prefer-not-say", label: "Prefer not to say" }
           ].map(option => (
-            <label key={option.value} className="flex items-center space-x-3 cursor-pointer">
-              <input
-                type="radio"
-                name="organizationContext"
-                value={option.value}
-                checked={data.organizationContext === option.value}
-                onChange={(e) => updateData({ organizationContext: e.target.value })}
-                className="w-4 h-4 text-accent bg-input border-border focus:ring-accent"
-              />
-              <span className="text-foreground">{option.label}</span>
-            </label>
+            <div key={option.value} className="flex items-center space-x-3">
+              <RadioGroupItem value={option.value} id={`orgContext-${option.value}`} />
+              <Label htmlFor={`orgContext-${option.value}`} className="font-normal cursor-pointer">
+                {option.label}
+              </Label>
+            </div>
           ))}
-        </div>
+        </RadioGroup>
       </div>
 
       {/* Question 18: Contact Information */}
@@ -83,54 +74,49 @@ export function ContactForm({ data, updateData }: ContactFormProps) {
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="name" className="text-sm">Name *</Label>
-            <input
+            <Input
               id="name"
               type="text"
               value={data.name || ""}
               onChange={(e) => updateData({ name: e.target.value })}
               placeholder="Your full name"
-              className="w-full px-4 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
               required
             />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="email" className="text-sm">Email *</Label>
-            <input
+            <Input
               id="email"
               type="email"
               value={data.email || ""}
               onChange={(e) => updateData({ email: e.target.value })}
               placeholder="your.email@example.com"
-              className="w-full px-4 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
               required
             />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="companyTeam" className="text-sm">Company/Team Name (optional)</Label>
-            <input
+            <Input
               id="companyTeam"
               type="text"
               value={data.companyTeam || ""}
               onChange={(e) => updateData({ companyTeam: e.target.value })}
               placeholder="Your company or team name"
-              className="w-full px-4 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
             />
           </div>
 
-          <div className="space-y-2">
-            <label className="flex items-start space-x-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={data.optedInCommunications || false}
-                onChange={(e) => updateData({ optedInCommunications: e.target.checked })}
-                className="w-4 h-4 mt-1 text-accent bg-input border-border rounded focus:ring-accent"
-              />
-              <span className="text-sm text-foreground">
-                I&apos;d like to receive occasional insights and resources about Agile coaching
-              </span>
-            </label>
+          <div className="flex items-start space-x-3">
+            <Checkbox
+              id="optedInCommunications"
+              checked={data.optedInCommunications || false}
+              onCheckedChange={(checked) => updateData({ optedInCommunications: checked as boolean })}
+              className="mt-1"
+            />
+            <Label htmlFor="optedInCommunications" className="text-sm font-normal cursor-pointer">
+              I&apos;d like to receive occasional insights and resources about Agile coaching
+            </Label>
           </div>
         </div>
       </div>

@@ -2,6 +2,10 @@
 
 import { AssessmentData } from "./assessment-form"
 import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 
 interface PainPointsFormProps {
   data: Partial<AssessmentData>
@@ -45,7 +49,7 @@ export function PainPointsForm({ data, updateData }: PainPointsFormProps) {
       {/* Question 10: Biggest Challenge */}
       <div className="space-y-3">
         <Label className="text-base font-medium">10. Biggest Current Challenge *</Label>
-        <div className="space-y-2">
+        <RadioGroup value={data.biggestChallenge} onValueChange={(value) => updateData({ biggestChallenge: value })}>
           {[
             { value: "unclear-priorities", label: "Unclear priorities / constantly changing scope" },
             { value: "stakeholder-engagement", label: "Limited stakeholder engagement" },
@@ -57,26 +61,19 @@ export function PainPointsForm({ data, updateData }: PainPointsFormProps) {
             { value: "ceremonies-waste", label: "Ceremonies feel like a waste of time" },
             { value: "other", label: "Other" }
           ].map(option => (
-            <label key={option.value} className="flex items-center space-x-3 cursor-pointer">
-              <input
-                type="radio"
-                name="biggestChallenge"
-                value={option.value}
-                checked={data.biggestChallenge === option.value}
-                onChange={(e) => updateData({ biggestChallenge: e.target.value })}
-                className="w-4 h-4 text-accent bg-input border-border focus:ring-accent"
-              />
-              <span className="text-foreground">{option.label}</span>
-            </label>
+            <div key={option.value} className="flex items-center space-x-3">
+              <RadioGroupItem value={option.value} id={`challenge-${option.value}`} />
+              <Label htmlFor={`challenge-${option.value}`} className="font-normal cursor-pointer">
+                {option.label}
+              </Label>
+            </div>
           ))}
-        </div>
+        </RadioGroup>
         {data.biggestChallenge === "other" && (
-          <input
-            type="text"
+          <Input
             placeholder="Please specify..."
             value={data.biggestChallengeOther || ""}
             onChange={(e) => updateData({ biggestChallengeOther: e.target.value })}
-            className="w-full px-4 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
           />
         )}
       </div>
@@ -219,15 +216,16 @@ export function PainPointsForm({ data, updateData }: PainPointsFormProps) {
             { value: "individual-goals", label: "Inattention to team results (individual goals prioritized)" },
             { value: "strong-cohesion", label: "Strong team cohesion (no major issues)" }
           ].map(option => (
-            <label key={option.value} className="flex items-center space-x-3 cursor-pointer">
-              <input
-                type="checkbox"
+            <div key={option.value} className="flex items-center space-x-3">
+              <Checkbox
+                id={`teamDynamics-${option.value}`}
                 checked={data.teamDynamics?.includes(option.value) || false}
-                onChange={() => handleCheckboxChange('teamDynamics', option.value)}
-                className="w-4 h-4 text-accent bg-input border-border rounded focus:ring-accent"
+                onCheckedChange={() => handleCheckboxChange('teamDynamics', option.value)}
               />
-              <span className="text-foreground">{option.label}</span>
-            </label>
+              <Label htmlFor={`teamDynamics-${option.value}`} className="font-normal cursor-pointer">
+                {option.label}
+              </Label>
+            </div>
           ))}
         </div>
       </div>
@@ -245,24 +243,23 @@ export function PainPointsForm({ data, updateData }: PainPointsFormProps) {
             "Minimal automation currently",
             "Other"
           ].map(option => (
-            <label key={option} className="flex items-center space-x-3 cursor-pointer">
-              <input
-                type="checkbox"
+            <div key={option} className="flex items-center space-x-3">
+              <Checkbox
+                id={`automation-${option}`}
                 checked={data.automationUsage?.includes(option) || false}
-                onChange={() => handleCheckboxChange('automationUsage', option)}
-                className="w-4 h-4 text-accent bg-input border-border rounded focus:ring-accent"
+                onCheckedChange={() => handleCheckboxChange('automationUsage', option)}
               />
-              <span className="text-foreground">{option}</span>
-            </label>
+              <Label htmlFor={`automation-${option}`} className="font-normal cursor-pointer">
+                {option}
+              </Label>
+            </div>
           ))}
         </div>
         {data.automationUsage?.includes("Other") && (
-          <input
-            type="text"
+          <Input
             placeholder="Please specify..."
             value={data.automationUsageOther || ""}
             onChange={(e) => updateData({ automationUsageOther: e.target.value })}
-            className="w-full px-4 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
           />
         )}
       </div>
@@ -275,13 +272,12 @@ export function PainPointsForm({ data, updateData }: PainPointsFormProps) {
         <p className="text-sm text-muted-foreground">
           Describe the top 2-3 things you&apos;d like to improve about your team&apos;s way of working (750 characters max)
         </p>
-        <textarea
+        <Textarea
           value={data.improvementGoals || ""}
           onChange={(e) => updateData({ improvementGoals: e.target.value })}
           maxLength={750}
           rows={6}
           placeholder="Describe what you&apos;d like to improve..."
-          className="w-full px-4 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent resize-none"
           required
         />
         <div className="text-xs text-muted-foreground text-right">

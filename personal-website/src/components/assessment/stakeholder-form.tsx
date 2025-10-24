@@ -2,6 +2,10 @@
 
 import { AssessmentData } from "./assessment-form"
 import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 
 interface StakeholderFormProps {
   data: Partial<AssessmentData>
@@ -52,7 +56,7 @@ export function StakeholderForm({ data, updateData }: StakeholderFormProps) {
       {/* Question 7: Product Owner Availability */}
       <div className="space-y-3">
         <Label className="text-base font-medium">7. Product Owner Availability *</Label>
-        <div className="space-y-2">
+        <RadioGroup value={data.poAvailability} onValueChange={(value) => updateData({ poAvailability: value })}>
           {[
             { value: "dedicated", label: "Dedicated PO (100% available to team)" },
             { value: "shared", label: "Shared PO (splits time across teams)" },
@@ -60,26 +64,19 @@ export function StakeholderForm({ data, updateData }: StakeholderFormProps) {
             { value: "none", label: "No clear PO identified" },
             { value: "other", label: "Other" }
           ].map(option => (
-            <label key={option.value} className="flex items-center space-x-3 cursor-pointer">
-              <input
-                type="radio"
-                name="poAvailability"
-                value={option.value}
-                checked={data.poAvailability === option.value}
-                onChange={(e) => updateData({ poAvailability: e.target.value })}
-                className="w-4 h-4 text-accent bg-input border-border focus:ring-accent"
-              />
-              <span className="text-foreground">{option.label}</span>
-            </label>
+            <div key={option.value} className="flex items-center space-x-3">
+              <RadioGroupItem value={option.value} id={`poAvail-${option.value}`} />
+              <Label htmlFor={`poAvail-${option.value}`} className="font-normal cursor-pointer">
+                {option.label}
+              </Label>
+            </div>
           ))}
-        </div>
+        </RadioGroup>
         {data.poAvailability === "other" && (
-          <input
-            type="text"
+          <Input
             placeholder="Please specify..."
             value={data.poAvailabilityOther || ""}
             onChange={(e) => updateData({ poAvailabilityOther: e.target.value })}
-            className="w-full px-4 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
           />
         )}
       </div>
@@ -92,13 +89,12 @@ export function StakeholderForm({ data, updateData }: StakeholderFormProps) {
         <p className="text-sm text-muted-foreground">
           What metrics or outcomes matter most? (500 characters max)
         </p>
-        <textarea
+        <Textarea
           value={data.successDefinition || ""}
           onChange={(e) => updateData({ successDefinition: e.target.value })}
           maxLength={500}
           rows={4}
           placeholder="Describe what success looks like..."
-          className="w-full px-4 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent resize-none"
           required
         />
         <div className="text-xs text-muted-foreground text-right">
@@ -122,24 +118,23 @@ export function StakeholderForm({ data, updateData }: StakeholderFormProps) {
             "None currently",
             "Other"
           ].map(metric => (
-            <label key={metric} className="flex items-center space-x-3 cursor-pointer">
-              <input
-                type="checkbox"
+            <div key={metric} className="flex items-center space-x-3">
+              <Checkbox
+                id={`metric-${metric}`}
                 checked={data.currentMetrics?.includes(metric) || false}
-                onChange={() => handleCheckboxChange('currentMetrics', metric)}
-                className="w-4 h-4 text-accent bg-input border-border rounded focus:ring-accent"
+                onCheckedChange={() => handleCheckboxChange('currentMetrics', metric)}
               />
-              <span className="text-foreground">{metric}</span>
-            </label>
+              <Label htmlFor={`metric-${metric}`} className="font-normal cursor-pointer">
+                {metric}
+              </Label>
+            </div>
           ))}
         </div>
         {data.currentMetrics?.includes("Other") && (
-          <input
-            type="text"
+          <Input
             placeholder="Please specify..."
             value={data.currentMetricsOther || ""}
             onChange={(e) => updateData({ currentMetricsOther: e.target.value })}
-            className="w-full px-4 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
           />
         )}
       </div>
