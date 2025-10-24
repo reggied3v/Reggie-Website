@@ -31,8 +31,8 @@ const contactInfo = [
   {
     icon: Mail,
     label: "Email",
-    value: "hello@reggied3v.com",
-    href: "mailto:hello@reggied3v.com"
+    value: "ReggieD3V@gmail.com",
+    href: "mailto:ReggieD3V@gmail.com"
   },
   {
     icon: Phone,
@@ -175,7 +175,7 @@ export function ContactSection() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" asChild>
-                  <a href="mailto:hello@reggied3v.com">
+                  <a href="mailto:ReggieD3V@gmail.com">
                     <Mail className="w-5 h-5 mr-2" />
                     Start a Conversation
                   </a>

@@ -149,7 +149,7 @@ export function HeroSection() {
               <Linkedin className="w-6 h-6" />
             </motion.a>
             <motion.a
-              href="mailto:Reggie.Ragsdale@us.bosch.com"
+              href="mailto:ReggieD3V@gmail.com"
               className="text-muted-foreground hover:text-accent smooth-transition"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}

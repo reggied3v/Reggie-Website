@@ -57,13 +57,14 @@ export function BuiltWithSection() {
                 className="group flex flex-col items-center gap-2 smooth-transition"
                 whileHover={{ y: -4 }}
               >
-                <div className={`relative w-12 h-12 flex items-center justify-center rounded-lg bg-gradient-to-br ${tool.fallbackBg} group-hover:scale-110 smooth-transition p-2`}>
+                <div className="relative w-16 h-16 flex items-center justify-center rounded-full bg-card border border-border group-hover:border-accent/50 group-hover:bg-accent/10 group-hover:scale-110 smooth-transition p-3 shadow-lg">
                   <Image
                     src={tool.logo}
                     alt={`${tool.name} logo`}
                     width={48}
                     height={48}
-                    className="w-full h-full object-contain text-foreground"
+                    className="w-full h-full object-contain invert brightness-0 dark:invert-0 dark:brightness-100"
+                    style={{ filter: 'brightness(0) invert(1)' }}
                   />
                 </div>
                 <span className="text-xs text-muted-foreground group-hover:text-foreground smooth-transition">
