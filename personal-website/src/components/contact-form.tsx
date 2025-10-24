@@ -3,6 +3,10 @@
 import { useState } from "react"
 import { Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
+import { toast } from "sonner"
 import { submitContactForm } from "@/app/actions/contact"
 
 interface FormData {
@@ -20,8 +24,6 @@ export function ContactForm() {
     message: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
-  const [errorMessage, setErrorMessage] = useState('')
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -34,8 +36,6 @@ export function ContactForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    setSubmitStatus('idle')
-    setErrorMessage('')
 
     try {
       const result = await submitContactForm(formData)
@@ -44,104 +44,70 @@ export function ContactForm() {
         throw new Error(result.error || 'Something went wrong')
       }
 
-      setSubmitStatus('success')
+      toast.success('Message sent successfully! I\'ll get back to you soon.')
       setFormData({ name: '', email: '', subject: '', message: '' })
     } catch (error) {
-      setSubmitStatus('error')
-      setErrorMessage(error instanceof Error ? error.message : 'Something went wrong')
+      const errorMsg = error instanceof Error ? error.message : 'Something went wrong'
+      toast.error(errorMsg)
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  if (submitStatus === 'success') {
-    return (
-      <div className="text-center py-8">
-        <div className="text-green-600 text-xl mb-4">✅ Message Sent!</div>
-        <p className="text-muted-foreground mb-4">
-          Thank you for reaching out! I&apos;ll get back to you as soon as possible.
-        </p>
-        <Button onClick={() => setSubmitStatus('idle')} variant="secondary">
-          Send Another Message
-        </Button>
-      </div>
-    )
-  }
-
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
-            Name
-          </label>
-          <input
-            type="text"
+        <div className="space-y-2">
+          <Label htmlFor="name">Name</Label>
+          <Input
             id="name"
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className="w-full px-4 py-3 rounded-lg border border-border bg-input text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-accent focus:border-accent smooth-transition"
             placeholder="Your name"
             required
             disabled={isSubmitting}
           />
         </div>
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
-            Email
-          </label>
-          <input
+        <div className="space-y-2">
+          <Label htmlFor="email">Email</Label>
+          <Input
             type="email"
             id="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full px-4 py-3 rounded-lg border border-border bg-input text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-accent focus:border-accent smooth-transition"
             placeholder="your.email@example.com"
             required
             disabled={isSubmitting}
           />
         </div>
       </div>
-      <div>
-        <label htmlFor="subject" className="block text-sm font-medium text-foreground mb-2">
-          Subject
-        </label>
-        <input
-          type="text"
+      <div className="space-y-2">
+        <Label htmlFor="subject">Subject</Label>
+        <Input
           id="subject"
           name="subject"
           value={formData.subject}
           onChange={handleChange}
-          className="w-full px-4 py-3 rounded-lg border border-border bg-input text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-accent focus:border-accent smooth-transition"
-          placeholder="What&apos;s this about?"
+          placeholder="What's this about?"
           required
           disabled={isSubmitting}
         />
       </div>
-      <div>
-        <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
-          Message
-        </label>
-        <textarea
+      <div className="space-y-2">
+        <Label htmlFor="message">Message</Label>
+        <Textarea
           id="message"
           name="message"
           rows={6}
           value={formData.message}
           onChange={handleChange}
-          className="w-full px-4 py-3 rounded-lg border border-border bg-input text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-accent focus:border-accent smooth-transition resize-none"
           placeholder="Tell me about your project or just say hello!"
           required
           disabled={isSubmitting}
         />
       </div>
-
-      {submitStatus === 'error' && (
-        <div className="text-red-600 text-sm">
-          ❌ {errorMessage}
-        </div>
-      )}
 
       <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
         <Mail className="w-5 h-5 mr-2" />

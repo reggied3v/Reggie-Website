@@ -3,8 +3,24 @@
 import { motion } from "framer-motion"
 import { ArrowDown, Github, Linkedin, Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useState, useEffect } from "react"
+
+// Generate consistent random values for background circles
+const backgroundCircles = [
+  { width: 250, height: 180, left: 15, top: 20, x: -30, y: 40, duration: 15 },
+  { width: 320, height: 240, left: 70, top: 60, x: 50, y: -30, duration: 18 },
+  { width: 180, height: 280, left: 40, top: 10, x: -20, y: 60, duration: 20 },
+  { width: 200, height: 150, left: 85, top: 75, x: 30, y: -40, duration: 16 },
+  { width: 280, height: 200, left: 25, top: 85, x: -40, y: 20, duration: 22 },
+]
 
 export function HeroSection() {
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
   }
@@ -15,30 +31,32 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-br from-background via-muted/20 to-background" />
 
       {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full bg-accent/5"
-            style={{
-              width: Math.random() * 300 + 100,
-              height: Math.random() * 300 + 100,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              x: [0, Math.random() * 100 - 50],
-              y: [0, Math.random() * 100 - 50],
-              scale: [1, 1.1, 1],
-            }}
-            transition={{
-              duration: Math.random() * 10 + 10,
-              repeat: Infinity,
-              repeatType: "reverse",
-            }}
-          />
-        ))}
-      </div>
+      {isMounted && (
+        <div className="absolute inset-0 overflow-hidden">
+          {backgroundCircles.map((circle, i) => (
+            <motion.div
+              key={i}
+              className="absolute rounded-full bg-accent/5"
+              style={{
+                width: circle.width,
+                height: circle.height,
+                left: `${circle.left}%`,
+                top: `${circle.top}%`,
+              }}
+              animate={{
+                x: [0, circle.x],
+                y: [0, circle.y],
+                scale: [1, 1.1, 1],
+              }}
+              transition={{
+                duration: circle.duration,
+                repeat: Infinity,
+                repeatType: "reverse",
+              }}
+            />
+          ))}
+        </div>
+      )}
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
@@ -59,7 +77,7 @@ export function HeroSection() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.8 }}
             >
-              ReggieD3V
+              Reggie Ragsdale
             </motion.span>
           </motion.h1>
 
@@ -69,7 +87,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            Developer • Creator • Problem Solver
+            Digital Delivery Lead • Scrum Master • Agile Coach
           </motion.p>
 
           <motion.p
@@ -78,7 +96,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
           >
-            Passionate about creating innovative solutions and building amazing applications that make a difference in people&apos;s lives.
+            Dynamic leader with 19+ years at Bosch, helping teams improve Agile practices through AI-powered assessments and continuous coaching. Specializing in digital transformation and leading high-performing teams to deliver measurable business impact.
           </motion.p>
 
           <motion.div
@@ -131,7 +149,7 @@ export function HeroSection() {
               <Linkedin className="w-6 h-6" />
             </motion.a>
             <motion.a
-              href="mailto:hello@reggied3v.com"
+              href="mailto:Reggie.Ragsdale@us.bosch.com"
               className="text-muted-foreground hover:text-accent smooth-transition"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}

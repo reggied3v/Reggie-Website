@@ -14,8 +14,7 @@ export async function submitContactForm(data: ContactFormData) {
   try {
     // 1. Save to Supabase
     const supabase = await createClient()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error: dbError } = await (supabase as any)
+    const { error: dbError } = await supabase
       .from('contacts')
       .insert([{
         name: data.name,

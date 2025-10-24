@@ -43,7 +43,7 @@ const contactInfo = [
   {
     icon: MapPin,
     label: "Location",
-    value: "San Francisco, CA",
+    value: "Saint Joseph, MI",
     href: "#"
   }
 ]
