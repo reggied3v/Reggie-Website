@@ -35,10 +35,7 @@ export function Navigation() {
 
   return (
     <motion.header
-      className={cn(
-        "fixed top-0 w-full z-50 smooth-transition",
-        isScrolled ? "glass shadow-lg" : "bg-transparent"
-      )}
+      className="fixed top-0 w-full z-50 smooth-transition glass shadow-lg"
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -73,12 +70,18 @@ export function Navigation() {
                   </Link>
                 </motion.div>
               ))}
-              <Link href="/admin/login">
-                <Button variant="ghost" size="sm">
-                  <Shield className="h-4 w-4 mr-2" />
+              <motion.div
+                whileHover={{ y: -2 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              >
+                <Link
+                  href="/admin/login"
+                  className="text-foreground hover:text-accent smooth-transition font-medium flex items-center"
+                >
+                  <Shield className="h-4 w-4 mr-1" />
                   Admin
-                </Button>
-              </Link>
+                </Link>
+              </motion.div>
             </div>
           </div>
 
