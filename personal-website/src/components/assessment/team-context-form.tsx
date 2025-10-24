@@ -2,6 +2,9 @@
 
 import { AssessmentData } from "./assessment-form"
 import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
 
 interface TeamContextFormProps {
   data: Partial<AssessmentData>
@@ -27,7 +30,7 @@ export function TeamContextForm({ data, updateData }: TeamContextFormProps) {
       {/* Question 1: Team Setup */}
       <div className="space-y-3">
         <Label className="text-base font-medium">1. Team Setup *</Label>
-        <div className="space-y-2">
+        <RadioGroup value={data.teamSetup} onValueChange={(value) => updateData({ teamSetup: value })}>
           {[
             { value: "single-new", label: "Single team just starting Scrum" },
             { value: "single-experienced", label: "Single team with some Scrum experience" },
@@ -35,19 +38,14 @@ export function TeamContextForm({ data, updateData }: TeamContextFormProps) {
             { value: "scaled-6+", label: "Scaled approach needed (6+ teams)" },
             { value: "other", label: "Other" }
           ].map(option => (
-            <label key={option.value} className="flex items-center space-x-3 cursor-pointer">
-              <input
-                type="radio"
-                name="teamSetup"
-                value={option.value}
-                checked={data.teamSetup === option.value}
-                onChange={(e) => updateData({ teamSetup: e.target.value })}
-                className="w-4 h-4 text-accent bg-input border-border focus:ring-accent"
-              />
-              <span className="text-foreground">{option.label}</span>
-            </label>
+            <div key={option.value} className="flex items-center space-x-3">
+              <RadioGroupItem value={option.value} id={`teamSetup-${option.value}`} />
+              <Label htmlFor={`teamSetup-${option.value}`} className="font-normal cursor-pointer">
+                {option.label}
+              </Label>
+            </div>
           ))}
-        </div>
+        </RadioGroup>
       </div>
 
       {/* Question 2: Team Maturity */}
@@ -75,7 +73,7 @@ export function TeamContextForm({ data, updateData }: TeamContextFormProps) {
       {/* Question 3: Current Tools */}
       <div className="space-y-3">
         <Label className="text-base font-medium">3. Current Tools (select all that apply)</Label>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {[
             "JIRA Cloud",
             "JIRA On-Premise",
@@ -86,24 +84,23 @@ export function TeamContextForm({ data, updateData }: TeamContextFormProps) {
             "Slack",
             "Other"
           ].map(tool => (
-            <label key={tool} className="flex items-center space-x-3 cursor-pointer">
-              <input
-                type="checkbox"
+            <div key={tool} className="flex items-center space-x-3">
+              <Checkbox
+                id={`tool-${tool}`}
                 checked={data.currentTools?.includes(tool) || false}
-                onChange={() => handleCheckboxChange('currentTools', tool)}
-                className="w-4 h-4 text-accent bg-input border-border rounded focus:ring-accent"
+                onCheckedChange={() => handleCheckboxChange('currentTools', tool)}
               />
-              <span className="text-foreground">{tool}</span>
-            </label>
+              <Label htmlFor={`tool-${tool}`} className="font-normal cursor-pointer">
+                {tool}
+              </Label>
+            </div>
           ))}
         </div>
         {data.currentTools?.includes("Other") && (
-          <input
-            type="text"
+          <Input
             placeholder="Please specify..."
             value={data.currentToolsOther || ""}
             onChange={(e) => updateData({ currentToolsOther: e.target.value })}
-            className="w-full px-4 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
           />
         )}
       </div>
@@ -111,32 +108,27 @@ export function TeamContextForm({ data, updateData }: TeamContextFormProps) {
       {/* Question 4: Team Distribution */}
       <div className="space-y-3">
         <Label className="text-base font-medium">4. Team Distribution *</Label>
-        <div className="space-y-2">
+        <RadioGroup value={data.teamDistribution} onValueChange={(value) => updateData({ teamDistribution: value })}>
           {[
             { value: "colocated", label: "Fully co-located" },
             { value: "hybrid", label: "Hybrid (some remote, some office)" },
             { value: "distributed-timezones", label: "Fully distributed across time zones" },
             { value: "distributed-similar", label: "Fully distributed within similar time zones" }
           ].map(option => (
-            <label key={option.value} className="flex items-center space-x-3 cursor-pointer">
-              <input
-                type="radio"
-                name="teamDistribution"
-                value={option.value}
-                checked={data.teamDistribution === option.value}
-                onChange={(e) => updateData({ teamDistribution: e.target.value })}
-                className="w-4 h-4 text-accent bg-input border-border focus:ring-accent"
-              />
-              <span className="text-foreground">{option.label}</span>
-            </label>
+            <div key={option.value} className="flex items-center space-x-3">
+              <RadioGroupItem value={option.value} id={`teamDist-${option.value}`} />
+              <Label htmlFor={`teamDist-${option.value}`} className="font-normal cursor-pointer">
+                {option.label}
+              </Label>
+            </div>
           ))}
-        </div>
+        </RadioGroup>
       </div>
 
       {/* Question 5: Current Scrum Events */}
       <div className="space-y-3">
         <Label className="text-base font-medium">5. Current Scrum Events (select all that apply)</Label>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {[
             "Daily Standup",
             "Sprint Planning",
@@ -146,24 +138,23 @@ export function TeamContextForm({ data, updateData }: TeamContextFormProps) {
             "None currently",
             "Other"
           ].map(event => (
-            <label key={event} className="flex items-center space-x-3 cursor-pointer">
-              <input
-                type="checkbox"
+            <div key={event} className="flex items-center space-x-3">
+              <Checkbox
+                id={`event-${event}`}
                 checked={data.currentEvents?.includes(event) || false}
-                onChange={() => handleCheckboxChange('currentEvents', event)}
-                className="w-4 h-4 text-accent bg-input border-border rounded focus:ring-accent"
+                onCheckedChange={() => handleCheckboxChange('currentEvents', event)}
               />
-              <span className="text-foreground">{event}</span>
-            </label>
+              <Label htmlFor={`event-${event}`} className="font-normal cursor-pointer">
+                {event}
+              </Label>
+            </div>
           ))}
         </div>
         {data.currentEvents?.includes("Other") && (
-          <input
-            type="text"
+          <Input
             placeholder="Please specify..."
             value={data.currentEventsOther || ""}
             onChange={(e) => updateData({ currentEventsOther: e.target.value })}
-            className="w-full px-4 py-2 bg-input text-foreground border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
           />
         )}
       </div>
