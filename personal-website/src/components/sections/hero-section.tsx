@@ -107,10 +107,10 @@ export function HeroSection() {
           >
             <Button
               size="lg"
-              onClick={() => scrollToSection("projects")}
+              onClick={() => scrollToSection("offerings")}
               className="text-lg px-8 py-3"
             >
-              View My Work
+              View My Offerings
             </Button>
             <Button
               variant="secondary"

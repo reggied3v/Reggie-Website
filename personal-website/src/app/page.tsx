@@ -4,7 +4,6 @@ import { AboutSection } from "@/components/sections/about-section"
 import { AIAssessmentCTA } from "@/components/sections/ai-assessment-cta"
 import { AIScrumMasterSection } from "@/components/sections/ai-scrum-master-section"
 import { OfferingComparison } from "@/components/sections/offering-comparison"
-import { ProjectsSection } from "@/components/sections/projects-section"
 import { ContactSection } from "@/components/sections/contact-section"
 import { BuiltWithSection } from "@/components/sections/built-with-section"
 
@@ -15,7 +14,6 @@ export default function Home() {
       <main>
         <HeroSection />
         <AboutSection />
-        <ProjectsSection />
         <OfferingComparison />
         <AIAssessmentCTA />
         <AIScrumMasterSection />
