@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* Warm book theme - force rebuild */
 @theme {
   --color-border: hsl(40 15% 85%);
   --color-input: hsl(40 15% 85%);
