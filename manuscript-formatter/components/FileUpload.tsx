@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Upload, FileText, AlertCircle } from 'lucide-react';
+import { Upload, FileText, AlertCircle, HelpCircle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { ProcessingStatus } from '@/types';
 
 interface FileUploadProps {
@@ -20,14 +21,16 @@ export default function FileUpload({ onFileSelect, status }: FileUploadProps) {
 
     // Check file type
     if (!file.name.endsWith('.docx')) {
-      setError('Please upload a .docx file only');
+      const fileExtension = file.name.split('.').pop()?.toUpperCase() || 'unknown';
+      setError(`Only .docx files are supported. You uploaded a .${fileExtension} file. Please convert your document to Microsoft Word (.docx) format and try again.`);
       return false;
     }
 
     // Check file size (5MB)
     const maxSize = 5 * 1024 * 1024;
     if (file.size > maxSize) {
-      setError('File size must be under 5MB');
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+      setError(`File exceeds 5MB limit. Your file is ${fileSizeMB} MB. Please use a smaller file or compress your document.`);
       return false;
     }
 
@@ -116,13 +119,30 @@ export default function FileUpload({ onFileSelect, status }: FileUploadProps) {
             </div>
 
             <div className="flex items-center justify-center gap-2">
-              <Badge variant="secondary" className="gap-1">
-                <FileText className="w-3 h-3" />
-                .docx only
-              </Badge>
-              <Badge variant="secondary">
-                Max 5MB
-              </Badge>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Badge variant="secondary" className="gap-1 cursor-help">
+                    <FileText className="w-3 h-3" />
+                    .docx only
+                    <HelpCircle className="w-3 h-3 ml-1" />
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="max-w-xs">Only Microsoft Word (.docx) files are supported. Save your document as .docx format before uploading.</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Badge variant="secondary" className="cursor-help">
+                    Max 5MB
+                    <HelpCircle className="w-3 h-3 ml-1" />
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="max-w-xs">Files larger than 5MB cannot be processed. Most manuscripts under 150,000 words should fit within this limit.</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
           </div>
         </CardContent>

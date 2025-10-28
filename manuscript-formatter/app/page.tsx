@@ -6,6 +6,7 @@ import FileUpload from '@/components/FileUpload';
 import ProcessingIndicator from '@/components/ProcessingIndicator';
 import DownloadSection from '@/components/DownloadSection';
 import FeedbackForm from '@/components/FeedbackForm';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { ProcessingStatus, FeedbackForm as FeedbackFormType } from '@/types';
 
 export default function Home() {
@@ -45,7 +46,21 @@ export default function Home() {
 
     } catch (err) {
       console.error('Upload error:', err);
-      setError(err instanceof Error ? err.message : 'An error occurred');
+
+      // Better error messages
+      let errorMessage = 'An unexpected error occurred. Please try again.';
+
+      if (err instanceof Error) {
+        if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+          errorMessage = 'Connection lost. Please check your internet connection and try again.';
+        } else if (err.message.includes('timeout')) {
+          errorMessage = 'Processing took too long. Your file might be too large or complex. Please try a smaller file.';
+        } else {
+          errorMessage = err.message;
+        }
+      }
+
+      setError(errorMessage);
       setStatus('error');
     }
   };
@@ -84,9 +99,10 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header with Home Button */}
-      <Header onReset={handleReset} />
+    <TooltipProvider>
+      <div className="min-h-screen bg-background">
+        {/* Header with Home Button */}
+        <Header onReset={handleReset} />
 
       {/* Main Content */}
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -144,38 +160,69 @@ export default function Home() {
                     What we do
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="bg-card text-card-foreground rounded-lg p-4 shadow-sm border">
-                      <h3 className="font-medium mb-2">
-                        Chapter Detection
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        Automatically detects chapters, prologues, and epilogues
-                      </p>
-                    </div>
-                    <div className="bg-card text-card-foreground rounded-lg p-4 shadow-sm border">
-                      <h3 className="font-medium mb-2">
-                        Typography Fixes
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        Converts quotes, dashes, and ellipsis to proper formats
-                      </p>
-                    </div>
-                    <div className="bg-card text-card-foreground rounded-lg p-4 shadow-sm border">
-                      <h3 className="font-medium mb-2">
-                        Professional Formatting
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        Applies industry-standard paragraph spacing and indents
-                      </p>
-                    </div>
-                    <div className="bg-card text-card-foreground rounded-lg p-4 shadow-sm border">
-                      <h3 className="font-medium mb-2">
-                        Table of Contents
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        Generates a clickable TOC from your chapters
-                      </p>
-                    </div>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="bg-card text-card-foreground rounded-lg p-4 shadow-sm border cursor-help hover:border-primary/50 transition-colors">
+                          <h3 className="font-medium mb-2">
+                            Chapter Detection
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            Automatically detects chapters, prologues, and epilogues
+                          </p>
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className="max-w-xs">Recognizes patterns like "Chapter 1", "Chapter One", "Prologue", and "Epilogue". Adds proper page breaks before each chapter.</p>
+                      </TooltipContent>
+                    </Tooltip>
+
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="bg-card text-card-foreground rounded-lg p-4 shadow-sm border cursor-help hover:border-primary/50 transition-colors">
+                          <h3 className="font-medium mb-2">
+                            Typography Fixes
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            Converts quotes, dashes, and ellipsis to proper formats
+                          </p>
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className="max-w-xs">Converts straight quotes ("") to curly quotes (""), double hyphens (--) to em-dashes (—), and triple dots (...) to ellipsis (…).</p>
+                      </TooltipContent>
+                    </Tooltip>
+
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="bg-card text-card-foreground rounded-lg p-4 shadow-sm border cursor-help hover:border-primary/50 transition-colors">
+                          <h3 className="font-medium mb-2">
+                            Professional Formatting
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            Applies industry-standard paragraph spacing and indents
+                          </p>
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className="max-w-xs">Adds 0.5 inch first-line indents to paragraphs (except the first paragraph after chapter headings) and proper spacing between paragraphs.</p>
+                      </TooltipContent>
+                    </Tooltip>
+
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="bg-card text-card-foreground rounded-lg p-4 shadow-sm border cursor-help hover:border-primary/50 transition-colors">
+                          <h3 className="font-medium mb-2">
+                            Table of Contents
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            Generates a clickable TOC from your chapters
+                          </p>
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className="max-w-xs">Creates a clickable table of contents at the beginning of your document with hyperlinks that jump to each chapter.</p>
+                      </TooltipContent>
+                    </Tooltip>
                   </div>
                 </div>
               </div>
@@ -202,11 +249,12 @@ export default function Home() {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-sm text-muted-foreground">
-        <p>Manuscript Formatter v1.0 MVP - Format your manuscripts for Kindle</p>
-        <p className="mt-1">Anonymous usage - No files are stored on our servers</p>
-      </footer>
-    </div>
+        {/* Footer */}
+        <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-sm text-muted-foreground">
+          <p>Manuscript Formatter v1.0 MVP - Format your manuscripts for Kindle</p>
+          <p className="mt-1">Anonymous usage - No files are stored on our servers</p>
+        </footer>
+      </div>
+    </TooltipProvider>
   );
 }

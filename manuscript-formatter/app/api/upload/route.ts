@@ -10,25 +10,30 @@ export async function POST(request: NextRequest) {
 
     if (!file) {
       return NextResponse.json(
-        { success: false, error: 'No file provided' },
+        { success: false, error: 'No file was uploaded. Please select a file and try again.' },
         { status: 400 }
       );
     }
 
     // Validate file type
     if (!file.name.endsWith('.docx')) {
+      const fileExtension = file.name.split('.').pop()?.toUpperCase() || 'unknown';
       return NextResponse.json(
-        { success: false, error: 'Only .docx files are supported' },
+        {
+          success: false,
+          error: `Only Microsoft Word (.docx) files are supported. You uploaded a .${fileExtension} file. Please convert your document to .docx format and try again.`
+        },
         { status: 400 }
       );
     }
 
     // Validate file size
     if (file.size > MAX_FILE_SIZE) {
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
       return NextResponse.json(
         {
           success: false,
-          error: 'File size exceeds 5MB limit'
+          error: `File size exceeds the 5MB limit. Your file is ${fileSizeMB} MB. Please compress your document or remove images to reduce the file size.`
         },
         { status: 400 }
       );
@@ -59,10 +64,27 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Upload error:', error);
+
+    // Provide more helpful error messages
+    let errorMessage = 'An unexpected error occurred while processing your file. Please try again.';
+
+    if (error instanceof Error) {
+      // Check for specific error types
+      if (error.message.includes('Invalid or corrupted')) {
+        errorMessage = 'The uploaded file appears to be corrupted or invalid. Please check your file and try again.';
+      } else if (error.message.includes('ENOENT') || error.message.includes('not found')) {
+        errorMessage = 'File processing failed. The file may have been corrupted during upload. Please try again.';
+      } else if (error.message.includes('memory') || error.message.includes('ENOMEM')) {
+        errorMessage = 'Your file is too complex to process. Please try a simpler document or contact support.';
+      } else {
+        errorMessage = error.message;
+      }
+    }
+
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to process file'
+        error: errorMessage
       },
       { status: 500 }
     );
