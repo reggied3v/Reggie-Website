@@ -47,7 +47,12 @@ export default function FormatSelector({ onFormatChange, initialPreset = 'ebook'
       [key]: value,
     };
     setCustomOptions(newOptions);
-    onFormatChange(getCurrentOptions());
+    // Merge preset with new custom options (not old state)
+    onFormatChange({
+      ...(FORMAT_PRESETS[selectedPreset] as FormatOptions),
+      ...newOptions,
+      preset: selectedPreset,
+    });
   };
 
   const presetInfo = {

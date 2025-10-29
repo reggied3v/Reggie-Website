@@ -62,6 +62,15 @@ export default function PreviewPane({ htmlContent, formatOptions, fileName, isLo
     return () => window.removeEventListener('resize', calculateFitZoom);
   }, [formatOptions.trimSize]);
 
+  // Center horizontally on initial load and when content changes
+  useEffect(() => {
+    if (containerRef.current && contentRef.current) {
+      const container = containerRef.current;
+      const horizontalCenter = (container.scrollWidth - container.clientWidth) / 2;
+      container.scrollLeft = horizontalCenter;
+    }
+  }, [htmlContent, zoom]);
+
   // Scroll to top when view mode changes or page changes (preserve horizontal center)
   useEffect(() => {
     if (containerRef.current) {
