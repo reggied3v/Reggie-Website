@@ -33,7 +33,7 @@ export interface FeedbackForm {
 export type ProcessingStatus = 'idle' | 'uploading' | 'processing' | 'complete' | 'error';
 
 // Format Options Types
-export type FormatPreset = 'ebook-fiction' | 'ebook-nonfiction' | 'print-paperback' | 'print-hardcover' | 'manuscript-submission';
+export type FormatPreset = 'ebook' | 'print-paperback' | 'print-hardcover' | 'manuscript-submission';
 
 export interface HeaderFooterConfig {
   enabled: boolean;
@@ -116,21 +116,11 @@ export interface FormatOptions {
 
 // Preset defaults
 export const FORMAT_PRESETS: Record<FormatPreset, Partial<FormatOptions>> = {
-  'ebook-fiction': {
-    preset: 'ebook-fiction',
+  'ebook': {
+    preset: 'ebook',
+    // Default to traditional indents (fiction style) - users can toggle to block paragraphs in advanced options
     indent: { enabled: true, size: 0.5, skipFirstParagraph: true },
     spacing: { lineHeight: 'single', beforeParagraph: 0, afterParagraph: 0 },
-    font: { family: 'Georgia', size: 12 },
-    typography: { curlyQuotes: true, emDashes: true, ellipsis: true },
-    generateTOC: true,
-    chapterPageBreaks: true,
-    alignment: 'left',
-    margins: { top: 0.5, bottom: 0.5, inside: 0.5, outside: 0.5 },
-  },
-  'ebook-nonfiction': {
-    preset: 'ebook-nonfiction',
-    indent: { enabled: false, size: 0, useBlockParagraphs: true },
-    spacing: { lineHeight: 'single', beforeParagraph: 6, afterParagraph: 6 },
     font: { family: 'Georgia', size: 12 },
     typography: { curlyQuotes: true, emDashes: true, ellipsis: true },
     generateTOC: true,
