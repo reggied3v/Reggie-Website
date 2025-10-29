@@ -188,7 +188,7 @@ function getPageNumberFormat(style: 'arabic' | 'roman' | 'Roman'): typeof Number
 /**
  * Creates a paragraph with page number
  */
-function createPageNumberParagraph(alignment: AlignmentType, numberFormat: NumberFormat): Paragraph {
+function createPageNumberParagraph(alignment: typeof AlignmentType.CENTER | typeof AlignmentType.LEFT | typeof AlignmentType.RIGHT | typeof AlignmentType.JUSTIFIED, numberFormat: typeof NumberFormat.LOWER_ROMAN | typeof NumberFormat.UPPER_ROMAN | typeof NumberFormat.DECIMAL): Paragraph {
   return new Paragraph({
     children: [
       new TextRun({
