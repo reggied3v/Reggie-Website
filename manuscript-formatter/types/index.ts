@@ -33,7 +33,7 @@ export interface FeedbackForm {
 export type ProcessingStatus = 'idle' | 'uploading' | 'processing' | 'complete' | 'error';
 
 // Format Options Types
-export type FormatPreset = 'ebook' | 'print-paperback' | 'print-hardcover' | 'manuscript-submission';
+export type FormatPreset = 'ebook' | 'print' | 'manuscript-submission';
 
 export interface HeaderFooterConfig {
   enabled: boolean;
@@ -84,6 +84,7 @@ export interface FontConfig {
   family: string;
   size: number; // in points
   chapterHeadingSize?: number;
+  chapterHeadingTopMargin?: number; // in inches - space above chapter heading
 }
 
 export interface FormatOptions {
@@ -121,45 +122,18 @@ export const FORMAT_PRESETS: Record<FormatPreset, Partial<FormatOptions>> = {
     // Default to traditional indents (fiction style) - users can toggle to block paragraphs in advanced options
     indent: { enabled: true, size: 0.5, skipFirstParagraph: true },
     spacing: { lineHeight: 'single', beforeParagraph: 0, afterParagraph: 0 },
-    font: { family: 'Georgia', size: 12 },
+    font: { family: 'Georgia', size: 12, chapterHeadingSize: 18, chapterHeadingTopMargin: 0 },
     typography: { curlyQuotes: true, emDashes: true, ellipsis: true },
     generateTOC: true,
     chapterPageBreaks: true,
     alignment: 'left',
     margins: { top: 0.5, bottom: 0.5, inside: 0.5, outside: 0.5 },
   },
-  'print-paperback': {
-    preset: 'print-paperback',
+  'print': {
+    preset: 'print',
     indent: { enabled: true, size: 0.5, skipFirstParagraph: true },
     spacing: { lineHeight: 'single', beforeParagraph: 0, afterParagraph: 0 },
-    font: { family: 'Garamond', size: 10, chapterHeadingSize: 24 },
-    typography: { curlyQuotes: true, emDashes: true, ellipsis: true },
-    generateTOC: true,
-    chapterPageBreaks: true,
-    alignment: 'justified',
-    margins: { top: 0.75, bottom: 0.75, inside: 0.5, outside: 0.25, calculateByPageCount: true },
-    trimSize: { width: 6, height: 9 },
-    headers: {
-      enabled: true,
-      oddPageHeader: 'Book Title',
-      evenPageHeader: 'Author Name',
-      position: 'center',
-      removeOnChapterPages: true,
-    },
-    pageNumbers: {
-      enabled: true,
-      style: 'arabic',
-      position: 'bottom-center',
-      startAt: 1,
-      frontMatterStyle: 'roman',
-    },
-  },
-  'print-hardcover': {
-    preset: 'print-hardcover',
-    // Identical to paperback for interior
-    indent: { enabled: true, size: 0.5, skipFirstParagraph: true },
-    spacing: { lineHeight: 'single', beforeParagraph: 0, afterParagraph: 0 },
-    font: { family: 'Garamond', size: 10, chapterHeadingSize: 24 },
+    font: { family: 'Garamond', size: 10, chapterHeadingSize: 24, chapterHeadingTopMargin: 1.5 },
     typography: { curlyQuotes: true, emDashes: true, ellipsis: true },
     generateTOC: true,
     chapterPageBreaks: true,
@@ -185,7 +159,7 @@ export const FORMAT_PRESETS: Record<FormatPreset, Partial<FormatOptions>> = {
     preset: 'manuscript-submission',
     indent: { enabled: true, size: 0.5, skipFirstParagraph: false },
     spacing: { lineHeight: 'double', beforeParagraph: 0, afterParagraph: 0 },
-    font: { family: 'Times New Roman', size: 12, chapterHeadingSize: 12 },
+    font: { family: 'Times New Roman', size: 12, chapterHeadingSize: 12, chapterHeadingTopMargin: 0 },
     typography: { curlyQuotes: false, emDashes: false, ellipsis: false }, // Keep simple for editing
     generateTOC: false,
     chapterPageBreaks: true,

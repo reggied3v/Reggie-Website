@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { processManuscript } from '@/lib/document-processor';
+import { FormatOptions } from '@/types';
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
+    const formatOptionsJson = formData.get('formatOptions') as string;
 
     if (!file) {
       return NextResponse.json(
@@ -33,18 +35,29 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: `File size exceeds the 5MB limit. Your file is ${fileSizeMB} MB. Please compress your document or remove images to reduce the file size.`
+          error: `File size exceeds the 10MB limit. Your file is ${fileSizeMB} MB. Please compress your document or remove images to reduce the file size.`
         },
         { status: 400 }
       );
+    }
+
+    // Parse format options
+    let formatOptions: Partial<FormatOptions> | undefined;
+    if (formatOptionsJson) {
+      try {
+        formatOptions = JSON.parse(formatOptionsJson);
+      } catch (error) {
+        console.error('Error parsing format options:', error);
+        // Continue with default options if parsing fails
+      }
     }
 
     // Convert file to buffer
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // Process the manuscript
-    const result = await processManuscript(buffer, file.name);
+    // Process the manuscript with format options
+    const result = await processManuscript(buffer, file.name, formatOptions);
 
     if (!result.success) {
       return NextResponse.json(

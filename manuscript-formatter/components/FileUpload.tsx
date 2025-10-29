@@ -26,11 +26,11 @@ export default function FileUpload({ onFileSelect, status }: FileUploadProps) {
       return false;
     }
 
-    // Check file size (5MB)
-    const maxSize = 5 * 1024 * 1024;
+    // Check file size (10MB)
+    const maxSize = 10 * 1024 * 1024;
     if (file.size > maxSize) {
       const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
-      setError(`File exceeds 5MB limit. Your file is ${fileSizeMB} MB. Please use a smaller file or compress your document.`);
+      setError(`File exceeds 10MB limit. Your file is ${fileSizeMB} MB. Please use a smaller file or compress your document.`);
       return false;
     }
 
@@ -135,12 +135,12 @@ export default function FileUpload({ onFileSelect, status }: FileUploadProps) {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Badge variant="secondary" className="cursor-help">
-                    Max 5MB
+                    Max 10MB
                     <HelpCircle className="w-3 h-3 ml-1" />
                   </Badge>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p className="max-w-xs">Files larger than 5MB cannot be processed. Most manuscripts under 150,000 words should fit within this limit.</p>
+                  <p className="max-w-xs">Files larger than 10MB cannot be processed. Most manuscripts under 250,000 words should fit within this limit.</p>
                 </TooltipContent>
               </Tooltip>
             </div>

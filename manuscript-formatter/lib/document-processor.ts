@@ -1,5 +1,5 @@
 import PizZip from 'pizzip';
-import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, convertInchesToTwip, InternalHyperlink, Bookmark } from 'docx';
+import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, convertInchesToTwip, InternalHyperlink, Bookmark, PageMargin, Header, Footer, PageNumber, NumberFormat } from 'docx';
 import { Chapter, DocumentMetadata, FormatOptions, FORMAT_PRESETS } from '@/types';
 
 interface ProcessingResult {
@@ -89,6 +89,59 @@ function convertLineHeightToTwips(lineHeight: 'single' | '1.15' | '1.5' | 'doubl
 }
 
 /**
+ * Estimates page count based on paragraph count for dynamic margin calculation
+ * Rough estimate: ~35 lines per page at single spacing, ~25 at double
+ * Average ~2-3 paragraphs per page for fiction
+ */
+function estimatePageCount(paragraphCount: number, lineHeight: 'single' | '1.15' | '1.5' | 'double'): number {
+  // Adjust estimate based on line spacing
+  const paragraphsPerPageMap = {
+    'single': 3,
+    '1.15': 2.5,
+    '1.5': 2,
+    'double': 1.5,
+  };
+
+  const paragraphsPerPage = paragraphsPerPageMap[lineHeight];
+  return Math.ceil(paragraphCount / paragraphsPerPage);
+}
+
+/**
+ * Calculates margins based on estimated page count (for print books)
+ * Based on KDP guidelines:
+ * - 24-150 pages: Inside 0.375", Outside 0.25"
+ * - 151-300 pages: Inside 0.5", Outside 0.25"
+ * - 301-500 pages: Inside 0.625", Outside 0.25"
+ * - 501+ pages: Inside 0.75", Outside 0.25"
+ */
+function calculateMarginsForPageCount(
+  estimatedPageCount: number,
+  baseMargins: { top: number; bottom: number; inside: number; outside: number }
+): { top: number; bottom: number; left: number; right: number } {
+  let insideMargin = baseMargins.inside;
+
+  // Apply page count-based adjustments
+  if (estimatedPageCount >= 501) {
+    insideMargin = 0.75;
+  } else if (estimatedPageCount >= 301) {
+    insideMargin = 0.625;
+  } else if (estimatedPageCount >= 151) {
+    insideMargin = 0.5;
+  } else if (estimatedPageCount >= 24) {
+    insideMargin = 0.375;
+  }
+
+  // For mirror margins in print books, inside becomes left on odd pages, right on even pages
+  // docx library handles this automatically with PageMargin settings
+  return {
+    top: baseMargins.top,
+    bottom: baseMargins.bottom,
+    left: baseMargins.outside,  // Outside margin (for left page in spread)
+    right: insideMargin,         // Inside margin (gutter)
+  };
+}
+
+/**
  * Fixes typography in text based on format options
  */
 function fixTypography(text: string, typographyConfig: { curlyQuotes: boolean; emDashes: boolean; ellipsis: boolean }): string {
@@ -115,6 +168,189 @@ function fixTypography(text: string, typographyConfig: { curlyQuotes: boolean; e
   fixed = fixed.replace(/  +/g, ' ');
 
   return fixed;
+}
+
+/**
+ * Creates page number format based on style
+ */
+function getPageNumberFormat(style: 'arabic' | 'roman' | 'Roman'): NumberFormat {
+  switch (style) {
+    case 'roman':
+      return NumberFormat.LOWER_ROMAN;
+    case 'Roman':
+      return NumberFormat.UPPER_ROMAN;
+    case 'arabic':
+    default:
+      return NumberFormat.DECIMAL;
+  }
+}
+
+/**
+ * Creates a paragraph with page number
+ */
+function createPageNumberParagraph(alignment: AlignmentType, numberFormat: NumberFormat): Paragraph {
+  return new Paragraph({
+    children: [
+      new TextRun({
+        children: [new PageNumber()],
+        size: 20, // 10pt font
+      }),
+    ],
+    alignment,
+  });
+}
+
+/**
+ * Creates header and footer objects based on format options
+ */
+function createHeadersFooters(options: FormatOptions) {
+  const headers: { default?: Header; even?: Header; first?: Header } = {};
+  const footers: { default?: Footer; even?: Footer; first?: Footer } = {};
+
+  const hasHeaders = options.headers?.enabled;
+  const hasPageNumbers = options.pageNumbers?.enabled;
+
+  if (!hasHeaders && !hasPageNumbers) {
+    return { headers: undefined, footers: undefined };
+  }
+
+  const headerConfig = options.headers;
+  const pageNumConfig = options.pageNumbers;
+
+  // Determine alignment for headers/footers based on position
+  let alignment = AlignmentType.CENTER;
+  if (headerConfig?.position === 'inside') {
+    alignment = AlignmentType.LEFT; // Inside for odd pages (left-aligned)
+  } else if (headerConfig?.position === 'outside') {
+    alignment = AlignmentType.RIGHT; // Outside for odd pages (right-aligned)
+  }
+
+  // Determine alignment for page numbers
+  let pageNumAlignment = AlignmentType.CENTER;
+  if (pageNumConfig?.enabled) {
+    const pos = pageNumConfig.position;
+    if (pos.includes('inside')) {
+      pageNumAlignment = AlignmentType.LEFT; // Inside for odd pages
+    } else if (pos.includes('outside')) {
+      pageNumAlignment = AlignmentType.RIGHT; // Outside for odd pages
+    } else if (pos.includes('center')) {
+      pageNumAlignment = AlignmentType.CENTER;
+    }
+  }
+
+  const pageNumFormat = pageNumConfig?.enabled ? getPageNumberFormat(pageNumConfig.style) : NumberFormat.DECIMAL;
+  const isPageNumInHeader = pageNumConfig?.enabled && pageNumConfig.position.startsWith('top');
+  const isPageNumInFooter = pageNumConfig?.enabled && pageNumConfig.position.startsWith('bottom');
+
+  // Create odd page header (default)
+  const oddHeaderParagraphs: Paragraph[] = [];
+  if (hasHeaders && headerConfig?.oddPageHeader) {
+    oddHeaderParagraphs.push(
+      new Paragraph({
+        children: [
+          new TextRun({
+            text: headerConfig.oddPageHeader,
+            size: 20, // 10pt font for headers
+            language: { value: 'en-US' },
+          }),
+        ],
+        alignment,
+      })
+    );
+  }
+  if (isPageNumInHeader) {
+    oddHeaderParagraphs.push(createPageNumberParagraph(pageNumAlignment, pageNumFormat));
+  }
+  if (oddHeaderParagraphs.length > 0) {
+    headers.default = new Header({ children: oddHeaderParagraphs });
+  }
+
+  // Create even page header
+  const evenAlignment = headerConfig?.position === 'inside'
+    ? AlignmentType.RIGHT  // Inside for even pages is right-aligned
+    : headerConfig?.position === 'outside'
+    ? AlignmentType.LEFT   // Outside for even pages is left-aligned
+    : AlignmentType.CENTER;
+
+  const evenPageNumAlignment = pageNumConfig?.position.includes('inside')
+    ? AlignmentType.RIGHT  // Inside for even pages
+    : pageNumConfig?.position.includes('outside')
+    ? AlignmentType.LEFT   // Outside for even pages
+    : AlignmentType.CENTER;
+
+  const evenHeaderParagraphs: Paragraph[] = [];
+  if (hasHeaders && headerConfig?.evenPageHeader) {
+    evenHeaderParagraphs.push(
+      new Paragraph({
+        children: [
+          new TextRun({
+            text: headerConfig.evenPageHeader,
+            size: 20,
+            language: { value: 'en-US' },
+          }),
+        ],
+        alignment: evenAlignment,
+      })
+    );
+  }
+  if (isPageNumInHeader) {
+    evenHeaderParagraphs.push(createPageNumberParagraph(evenPageNumAlignment, pageNumFormat));
+  }
+  if (evenHeaderParagraphs.length > 0) {
+    headers.even = new Header({ children: evenHeaderParagraphs });
+  }
+
+  // Create odd page footer (default)
+  const oddFooterParagraphs: Paragraph[] = [];
+  if (hasHeaders && headerConfig?.oddPageFooter) {
+    oddFooterParagraphs.push(
+      new Paragraph({
+        children: [
+          new TextRun({
+            text: headerConfig.oddPageFooter,
+            size: 20,
+            language: { value: 'en-US' },
+          }),
+        ],
+        alignment,
+      })
+    );
+  }
+  if (isPageNumInFooter) {
+    oddFooterParagraphs.push(createPageNumberParagraph(pageNumAlignment, pageNumFormat));
+  }
+  if (oddFooterParagraphs.length > 0) {
+    footers.default = new Footer({ children: oddFooterParagraphs });
+  }
+
+  // Create even page footer
+  const evenFooterParagraphs: Paragraph[] = [];
+  if (hasHeaders && headerConfig?.evenPageFooter) {
+    evenFooterParagraphs.push(
+      new Paragraph({
+        children: [
+          new TextRun({
+            text: headerConfig.evenPageFooter,
+            size: 20,
+            language: { value: 'en-US' },
+          }),
+        ],
+        alignment: evenAlignment,
+      })
+    );
+  }
+  if (isPageNumInFooter) {
+    evenFooterParagraphs.push(createPageNumberParagraph(evenPageNumAlignment, pageNumFormat));
+  }
+  if (evenFooterParagraphs.length > 0) {
+    footers.even = new Footer({ children: evenFooterParagraphs });
+  }
+
+  return {
+    headers: Object.keys(headers).length > 0 ? headers : undefined,
+    footers: Object.keys(footers).length > 0 ? footers : undefined,
+    pageNumberFormat: pageNumFormat,
+  };
 }
 
 /**
@@ -338,11 +574,82 @@ export async function processManuscript(
     // Combine TOC + document content
     const allParagraphs = [...tocParagraphs, ...documentParagraphs];
 
+    // Calculate margins (dynamic for print books with calculateByPageCount enabled)
+    let finalMargins = {
+      top: convertInchesToTwip(options.margins.top),
+      bottom: convertInchesToTwip(options.margins.bottom),
+      left: convertInchesToTwip(options.margins.outside),
+      right: convertInchesToTwip(options.margins.inside),
+    };
+
+    if (options.margins.calculateByPageCount) {
+      const estimatedPages = estimatePageCount(paragraphs.length, options.spacing.lineHeight);
+      const calculatedMargins = calculateMarginsForPageCount(estimatedPages, options.margins);
+      finalMargins = {
+        top: convertInchesToTwip(calculatedMargins.top),
+        bottom: convertInchesToTwip(calculatedMargins.bottom),
+        left: convertInchesToTwip(calculatedMargins.left),
+        right: convertInchesToTwip(calculatedMargins.right),
+      };
+    }
+
+    // Substitute author name and book title in headers/footers if provided
+    if (options.headers && (options.authorName || options.bookTitle)) {
+      if (options.headers.oddPageHeader) {
+        options.headers.oddPageHeader = options.headers.oddPageHeader
+          .replace('Author Name', options.authorName || 'Author Name')
+          .replace('Book Title', options.bookTitle || 'Book Title');
+      }
+      if (options.headers.evenPageHeader) {
+        options.headers.evenPageHeader = options.headers.evenPageHeader
+          .replace('Author Name', options.authorName || 'Author Name')
+          .replace('Book Title', options.bookTitle || 'Book Title');
+      }
+      if (options.headers.oddPageFooter) {
+        options.headers.oddPageFooter = options.headers.oddPageFooter
+          .replace('Author Name', options.authorName || 'Author Name')
+          .replace('Book Title', options.bookTitle || 'Book Title');
+      }
+      if (options.headers.evenPageFooter) {
+        options.headers.evenPageFooter = options.headers.evenPageFooter
+          .replace('Author Name', options.authorName || 'Author Name')
+          .replace('Book Title', options.bookTitle || 'Book Title');
+      }
+    }
+
+    // Create headers and footers
+    const { headers, footers, pageNumberFormat } = createHeadersFooters(options);
+
     // Create new document
     const doc = new Document({
       sections: [
         {
-          properties: {},
+          properties: {
+            page: {
+              margin: finalMargins,
+              // Set page size if trim size is specified (for print books)
+              ...(options.trimSize && {
+                size: {
+                  width: convertInchesToTwip(options.trimSize.width),
+                  height: convertInchesToTwip(options.trimSize.height),
+                },
+              }),
+              // Set page number format and start
+              ...(options.pageNumbers?.enabled && {
+                pageNumbers: {
+                  start: options.pageNumbers.startAt,
+                  formatType: pageNumberFormat,
+                },
+              }),
+            },
+            // Enable different headers for odd and even pages
+            ...((headers || footers) && {
+              titlePage: false,
+              differentOddAndEvenPages: true
+            }),
+          },
+          headers,
+          footers,
           children: allParagraphs,
         },
       ],

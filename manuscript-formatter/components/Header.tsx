@@ -26,12 +26,12 @@ export default function Header({ onReset }: HeaderProps) {
         {onReset && (
           <Button
             variant="ghost"
-            size="sm"
+            size="default"
             onClick={onReset}
-            className="gap-2"
+            className="gap-2 text-base"
           >
-            <Home className="h-4 w-4" />
-            <span className="hidden sm:inline">Start Over</span>
+            <Home className="h-5 w-5" />
+            <span className="hidden sm:inline">Home</span>
           </Button>
         )}
       </div>
