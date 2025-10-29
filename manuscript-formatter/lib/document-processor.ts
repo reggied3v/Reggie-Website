@@ -1,6 +1,6 @@
 import PizZip from 'pizzip';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, convertInchesToTwip, InternalHyperlink, Bookmark } from 'docx';
-import { Chapter, DocumentMetadata } from '@/types';
+import { Chapter, DocumentMetadata, FormatOptions, FORMAT_PRESETS } from '@/types';
 
 interface ProcessingResult {
   success: boolean;
@@ -75,21 +75,41 @@ function normalizeChapterTitle(title: string, chapterNumber: number, type: Chapt
 }
 
 /**
- * Fixes typography in text
+ * Converts line height setting to twips for docx
+ * Single = 240, 1.15 = 276, 1.5 = 360, Double = 480
  */
-function fixTypography(text: string): string {
+function convertLineHeightToTwips(lineHeight: 'single' | '1.15' | '1.5' | 'double'): number {
+  const lineHeightMap = {
+    'single': 240,
+    '1.15': 276,
+    '1.5': 360,
+    'double': 480,
+  };
+  return lineHeightMap[lineHeight];
+}
+
+/**
+ * Fixes typography in text based on format options
+ */
+function fixTypography(text: string, typographyConfig: { curlyQuotes: boolean; emDashes: boolean; ellipsis: boolean }): string {
   // First decode any HTML entities
   let fixed = decodeHtmlEntities(text);
 
-  // Fix straight quotes to curly quotes
-  fixed = fixed.replace(/(?<=\s|^)"([^"]*)"/g, '\u201c$1\u201d'); // Double quotes
-  fixed = fixed.replace(/(?<=\s|^)'([^']*)'/g, '\u2018$1\u2019'); // Single quotes
+  // Fix straight quotes to curly quotes (if enabled)
+  if (typographyConfig.curlyQuotes) {
+    fixed = fixed.replace(/(?<=\s|^)"([^"]*)"/g, '\u201c$1\u201d'); // Double quotes
+    fixed = fixed.replace(/(?<=\s|^)'([^']*)'/g, '\u2018$1\u2019'); // Single quotes
+  }
 
-  // Fix double hyphens to em-dash
-  fixed = fixed.replace(/--/g, '\u2014');
+  // Fix double hyphens to em-dash (if enabled)
+  if (typographyConfig.emDashes) {
+    fixed = fixed.replace(/--/g, '\u2014');
+  }
 
-  // Fix triple dots to ellipsis
-  fixed = fixed.replace(/\.\.\./g, '\u2026');
+  // Fix triple dots to ellipsis (if enabled)
+  if (typographyConfig.ellipsis) {
+    fixed = fixed.replace(/\.\.\./g, '\u2026');
+  }
 
   // Remove double spaces
   fixed = fixed.replace(/  +/g, ' ');
@@ -138,12 +158,18 @@ async function extractDocxContent(buffer: Buffer): Promise<{ paragraphs: string[
 }
 
 /**
- * Processes a manuscript .docx file
+ * Processes a manuscript .docx file with format options
  */
 export async function processManuscript(
   buffer: Buffer,
-  originalFileName: string
+  originalFileName: string,
+  formatOptions?: Partial<FormatOptions>
 ): Promise<ProcessingResult> {
+  // Merge with default eBook preset if no options provided
+  const options: FormatOptions = {
+    ...(FORMAT_PRESETS['ebook'] as FormatOptions),
+    ...formatOptions,
+  };
   try {
     // Extract content from the uploaded .docx
     const { paragraphs } = await extractDocxContent(buffer);
@@ -211,11 +237,12 @@ export async function processManuscript(
 
         isFirstParagraphOfSection = true;
       } else {
-        // Fix typography
-        const fixedText = fixTypography(text);
+        // Fix typography based on format options
+        const fixedText = fixTypography(text, options.typography);
 
-        // Apply paragraph formatting
-        const indent = isFirstParagraphOfSection ? 0 : convertInchesToTwip(0.5);
+        // Apply paragraph formatting based on format options
+        const shouldIndent = options.indent.enabled && !(isFirstParagraphOfSection && options.indent.skipFirstParagraph);
+        const indent = shouldIndent ? convertInchesToTwip(options.indent.size) : 0;
 
         documentParagraphs.push(
           new Paragraph({
@@ -231,9 +258,11 @@ export async function processManuscript(
               firstLine: indent,
             },
             spacing: {
-              after: 0,
-              line: 276, // 1.15 line spacing
+              before: options.spacing.beforeParagraph,
+              after: options.spacing.afterParagraph,
+              line: convertLineHeightToTwips(options.spacing.lineHeight),
             },
+            alignment: options.alignment === 'justified' ? AlignmentType.JUSTIFIED : AlignmentType.LEFT,
           })
         );
 
@@ -241,66 +270,70 @@ export async function processManuscript(
       }
     });
 
-    // Create Table of Contents
-    const tocParagraphs: Paragraph[] = [
-      new Paragraph({
-        children: [
-          new TextRun({
-            text: 'Table of Contents',
-            bold: true,
-            language: {
-              value: 'en-US',
-            },
-          }),
-        ],
-        heading: HeadingLevel.HEADING_1,
-        alignment: AlignmentType.CENTER,
-        spacing: { after: 240 },
-      }),
-    ];
+    // Create Table of Contents (if enabled in format options)
+    const tocParagraphs: Paragraph[] = [];
 
-    // Track chapter numbers for normalization
-    let chapterCount = 0;
-    chapters.forEach((chapter, index) => {
-      // Increment chapter count only for regular chapters
-      if (chapter.type === 'chapter') {
-        chapterCount++;
-      }
-
-      // Use normalized title for TOC
-      const tocTitle = normalizeChapterTitle(chapter.title, chapterCount, chapter.type);
-
-      // Generate bookmark ID that matches the one created for the chapter
-      const bookmarkId = `chapter_${index + 1}`;
-
-      // Create hyperlink to chapter
+    if (options.generateTOC) {
       tocParagraphs.push(
         new Paragraph({
           children: [
-            new InternalHyperlink({
-              anchor: bookmarkId,
-              children: [
-                new TextRun({
-                  text: tocTitle,
-                  style: 'Hyperlink',
-                  language: {
-                    value: 'en-US',
-                  },
-                }),
-              ],
+            new TextRun({
+              text: 'Table of Contents',
+              bold: true,
+              language: {
+                value: 'en-US',
+              },
             }),
           ],
-          spacing: { after: 120 },
+          heading: HeadingLevel.HEADING_1,
+          alignment: AlignmentType.CENTER,
+          spacing: { after: 240 },
         })
       );
-    });
 
-    // Add page break after TOC
-    tocParagraphs.push(
-      new Paragraph({
-        pageBreakBefore: true,
-      })
-    );
+      // Track chapter numbers for normalization
+      let chapterCount = 0;
+      chapters.forEach((chapter, index) => {
+        // Increment chapter count only for regular chapters
+        if (chapter.type === 'chapter') {
+          chapterCount++;
+        }
+
+        // Use normalized title for TOC
+        const tocTitle = normalizeChapterTitle(chapter.title, chapterCount, chapter.type);
+
+        // Generate bookmark ID that matches the one created for the chapter
+        const bookmarkId = `chapter_${index + 1}`;
+
+        // Create hyperlink to chapter
+        tocParagraphs.push(
+          new Paragraph({
+            children: [
+              new InternalHyperlink({
+                anchor: bookmarkId,
+                children: [
+                  new TextRun({
+                    text: tocTitle,
+                    style: 'Hyperlink',
+                    language: {
+                      value: 'en-US',
+                    },
+                  }),
+                ],
+              }),
+            ],
+            spacing: { after: 120 },
+          })
+        );
+      });
+
+      // Add page break after TOC
+      tocParagraphs.push(
+        new Paragraph({
+          pageBreakBefore: true,
+        })
+      );
+    }
 
     // Combine TOC + document content
     const allParagraphs = [...tocParagraphs, ...documentParagraphs];
