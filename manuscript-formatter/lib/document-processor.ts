@@ -192,7 +192,7 @@ function createPageNumberParagraph(alignment: typeof AlignmentType.CENTER | type
   return new Paragraph({
     children: [
       new TextRun({
-        children: [new PageNumber()],
+        children: [PageNumber.CURRENT],
         size: 20, // 10pt font
       }),
     ],
