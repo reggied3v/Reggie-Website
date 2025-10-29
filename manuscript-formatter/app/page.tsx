@@ -6,6 +6,7 @@ import FileUpload from '@/components/FileUpload';
 import ProcessingIndicator from '@/components/ProcessingIndicator';
 import DownloadSection from '@/components/DownloadSection';
 import FeedbackForm from '@/components/FeedbackForm';
+import FAQ from '@/components/FAQ';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { ProcessingStatus, FeedbackForm as FeedbackFormType } from '@/types';
 
@@ -224,6 +225,11 @@ export default function Home() {
                       </TooltipContent>
                     </Tooltip>
                   </div>
+                </div>
+
+                {/* FAQ Section */}
+                <div className="mt-16">
+                  <FAQ />
                 </div>
               </div>
             )}
