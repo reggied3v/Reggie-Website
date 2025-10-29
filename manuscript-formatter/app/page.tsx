@@ -372,19 +372,20 @@ export default function Home() {
 
                   {/* Right: Preview */}
                   <div className="lg:sticky lg:top-4 h-[600px]">
-                    {isGeneratingPreview ? (
+                    {previewHtml ? (
+                      <PreviewPane
+                        htmlContent={previewHtml}
+                        formatOptions={formatOptions}
+                        fileName={selectedFile.name}
+                        isLoading={isGeneratingPreview}
+                      />
+                    ) : isGeneratingPreview ? (
                       <div className="w-full h-full flex items-center justify-center bg-muted/30 rounded-lg border">
                         <div className="text-center">
                           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
                           <p className="text-sm text-muted-foreground">Generating preview...</p>
                         </div>
                       </div>
-                    ) : previewHtml ? (
-                      <PreviewPane
-                        htmlContent={previewHtml}
-                        formatOptions={formatOptions}
-                        fileName={selectedFile.name}
-                      />
                     ) : null}
                   </div>
                 </div>

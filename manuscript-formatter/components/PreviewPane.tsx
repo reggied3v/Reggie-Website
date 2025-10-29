@@ -8,19 +8,25 @@ interface PreviewPaneProps {
   htmlContent: string;
   formatOptions: FormatOptions;
   fileName?: string;
+  isLoading?: boolean;
 }
 
-export default function PreviewPane({ htmlContent, formatOptions, fileName }: PreviewPaneProps) {
+export default function PreviewPane({ htmlContent, formatOptions, fileName, isLoading = false }: PreviewPaneProps) {
   const [zoom, setZoom] = useState(100);
   const [fitToPageZoom, setFitToPageZoom] = useState(100);
   const [viewMode, setViewMode] = useState<'scroll' | 'page'>('scroll');
   const [currentPage, setCurrentPage] = useState(0);
+  const [styles, setStyles] = useState(() => generatePreviewStyles(formatOptions));
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const styles = generatePreviewStyles(formatOptions);
 
   // Split content into pages based on page breaks
   const pages = htmlContent.split('<div class="page-break"></div>').filter(page => page.trim());
+
+  // Update styles whenever formatOptions change
+  useEffect(() => {
+    setStyles(generatePreviewStyles(formatOptions));
+  }, [formatOptions]);
 
   // Calculate zoom to fit page width to container
   useEffect(() => {
@@ -92,8 +98,44 @@ export default function PreviewPane({ htmlContent, formatOptions, fileName }: Pr
     setCurrentPage(0); // Reset to first page when switching modes
   };
 
+  // Handle TOC link clicks in Pages view
+  const handleContentClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (viewMode !== 'page') return;
+
+    const target = e.target as HTMLElement;
+    const link = target.closest('a');
+
+    if (link && link.href.includes('#chapter-')) {
+      e.preventDefault();
+
+      // Extract chapter index from the link
+      const chapterMatch = link.href.match(/#chapter-(\d+)/);
+      if (chapterMatch) {
+        const chapterIndex = parseInt(chapterMatch[1], 10);
+
+        // Find which page contains this chapter
+        for (let i = 0; i < pages.length; i++) {
+          if (pages[i].includes(`data-chapter-index="${chapterIndex}"`)) {
+            setCurrentPage(i);
+            break;
+          }
+        }
+      }
+    }
+  };
+
   return (
-    <div className="w-full h-full flex flex-col bg-muted/30 rounded-lg border">
+    <div className="w-full h-full flex flex-col bg-muted/30 rounded-lg border relative">
+      {/* Loading Overlay */}
+      {isLoading && (
+        <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center rounded-lg">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-sm text-muted-foreground">Updating preview...</p>
+          </div>
+        </div>
+      )}
+
       {/* Preview Header */}
       <div className="flex flex-wrap items-center gap-3 px-4 py-3 border-b bg-card">
         <div className="flex items-center space-x-2 flex-shrink-0">
@@ -232,12 +274,10 @@ export default function PreviewPane({ htmlContent, formatOptions, fileName }: Pr
               : '11in',
           }}
         >
-          <style
-            key={`${formatOptions.spacing.lineHeight}-${formatOptions.font.size}`}
-            dangerouslySetInnerHTML={{ __html: styles }}
-          />
+          <style dangerouslySetInnerHTML={{ __html: styles }} />
           <div
             className="preview-content"
+            onClick={handleContentClick}
             dangerouslySetInnerHTML={{
               __html: viewMode === 'scroll'
                 ? htmlContent
