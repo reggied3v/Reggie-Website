@@ -173,7 +173,7 @@ function fixTypography(text: string, typographyConfig: { curlyQuotes: boolean; e
 /**
  * Creates page number format based on style
  */
-function getPageNumberFormat(style: 'arabic' | 'roman' | 'Roman'): typeof NumberFormat.DECIMAL {
+function getPageNumberFormat(style: 'arabic' | 'roman' | 'Roman'): NumberFormat {
   switch (style) {
     case 'roman':
       return NumberFormat.LOWER_ROMAN;
