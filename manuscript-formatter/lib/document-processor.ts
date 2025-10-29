@@ -218,7 +218,7 @@ function createHeadersFooters(options: FormatOptions) {
   const pageNumConfig = options.pageNumbers;
 
   // Determine alignment for headers/footers based on position
-  let alignment = AlignmentType.CENTER;
+  let alignment: typeof AlignmentType.CENTER | typeof AlignmentType.LEFT | typeof AlignmentType.RIGHT | typeof AlignmentType.JUSTIFIED = AlignmentType.CENTER;
   if (headerConfig?.position === 'inside') {
     alignment = AlignmentType.LEFT; // Inside for odd pages (left-aligned)
   } else if (headerConfig?.position === 'outside') {
@@ -226,7 +226,7 @@ function createHeadersFooters(options: FormatOptions) {
   }
 
   // Determine alignment for page numbers
-  let pageNumAlignment = AlignmentType.CENTER;
+  let pageNumAlignment: typeof AlignmentType.CENTER | typeof AlignmentType.LEFT | typeof AlignmentType.RIGHT | typeof AlignmentType.JUSTIFIED = AlignmentType.CENTER;
   if (pageNumConfig?.enabled) {
     const pos = pageNumConfig.position;
     if (pos.includes('inside')) {
