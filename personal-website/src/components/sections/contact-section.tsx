@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Mail, MapPin, Phone, Github, Linkedin, Twitter } from "lucide-react"
+import { Mail, MapPin, Github, Linkedin } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ContactForm } from "@/components/contact-form"
@@ -16,14 +16,8 @@ const socialLinks = [
   {
     name: "LinkedIn",
     icon: Linkedin,
-    href: "https://linkedin.com/in/reggied3v",
+    href: "http://linkedin.com/in/reggie-ragsdale",
     color: "hover:text-[#0077b5]"
-  },
-  {
-    name: "Twitter",
-    icon: Twitter,
-    href: "https://twitter.com/reggied3v",
-    color: "hover:text-[#1da1f2]"
   }
 ]
 
@@ -33,12 +27,6 @@ const contactInfo = [
     label: "Email",
     value: "ReggieD3V@gmail.com",
     href: "mailto:ReggieD3V@gmail.com"
-  },
-  {
-    icon: Phone,
-    label: "Phone",
-    value: "+1 (555) 123-4567",
-    href: "tel:+15551234567"
   },
   {
     icon: MapPin,
@@ -155,40 +143,6 @@ export function ContactSection() {
             </Card>
           </motion.div>
         </div>
-
-        {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="text-center mt-16"
-        >
-          <Card className="max-w-2xl mx-auto glass">
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-foreground mb-4">
-                Ready to Start a Project?
-              </h3>
-              <p className="text-muted-foreground mb-6">
-                Whether you have a specific project in mind or just want to explore possibilities,
-                I&apos;d love to hear from you. Let&apos;s create something amazing together!
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" asChild>
-                  <a href="mailto:ReggieD3V@gmail.com">
-                    <Mail className="w-5 h-5 mr-2" />
-                    Start a Conversation
-                  </a>
-                </Button>
-                <Button variant="secondary" size="lg" asChild>
-                  <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
-                    Download Resume
-                  </a>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
       </div>
     </section>
   )

@@ -107,10 +107,10 @@ export function HeroSection() {
           >
             <Button
               size="lg"
-              onClick={() => scrollToSection("offerings")}
+              onClick={() => scrollToSection("projects")}
               className="text-lg px-8 py-3"
             >
-              View My Offerings
+              View My Work
             </Button>
             <Button
               variant="secondary"
@@ -139,7 +139,7 @@ export function HeroSection() {
               <Github className="w-6 h-6" />
             </motion.a>
             <motion.a
-              href="https://linkedin.com/in/reggied3v"
+              href="http://linkedin.com/in/reggie-ragsdale"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-accent smooth-transition"

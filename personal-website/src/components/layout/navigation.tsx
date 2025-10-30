@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils"
 const navItems = [
   { name: "Home", href: "/" },
   { name: "About", href: "/#about" },
+  { name: "Projects", href: "/#projects" },
   { name: "Agile Assessment", href: "/ai-scrum-master/assessment" },
   { name: "AI Scrum Master", href: "/ai-scrum-master" },
   { name: "Contact", href: "/#contact" },
