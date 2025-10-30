@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { ExternalLink } from "lucide-react"
+import { ExternalLink, Brain, UsersRound, Apple, Zap, Layout, Heart } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
@@ -9,42 +9,42 @@ const projects = [
   {
     title: "Smart Information Hub",
     description: "Led end-to-end launch of internal Bosch smart information hub, scaling from concept to 20,000+ users in under two years. Defined product-market fit, established OKRs/KPIs, and achieved first external sale (5,000 licenses) within two months.",
-    image: "/api/placeholder/600/400",
+    icon: Brain,
     technologies: ["Product Management", "OKR", "Go-to-Market", "Gen AI", "DIA Brain"],
     featured: true
   },
   {
     title: "Enterprise Scrum Scaling",
     description: "Scaled Enterprise Scrum to 12 IT Support teams supporting 20,000+ customers across the Americas. Served as Global Scrum Master and Agile Coach, building high-performing cross-functional teams across multiple countries.",
-    image: "/api/placeholder/600/400",
+    icon: UsersRound,
     technologies: ["Scrum", "Agile Coaching", "JIRA", "Azure DevOps", "LeSS"],
     featured: true
   },
   {
     title: "Mac@Bosch Initiative",
     description: "Served as North America Responsible for the Mac@Bosch initiative, leading strategy and implementation across the region. Championed technology adoption and internal community building.",
-    image: "/api/placeholder/600/400",
+    icon: Apple,
     technologies: ["IT Consulting", "Strategy", "Change Management", "Leadership"],
     featured: true
   },
   {
     title: "Power Platform Strategy",
     description: "Led Power Platform strategy and enablement in North America, implementing automation improvements across multiple regions.",
-    image: "/api/placeholder/600/400",
+    icon: Zap,
     technologies: ["Power Platform", "Power Automate", "Automation", "Strategy"],
     featured: false
   },
   {
     title: "Curated Information Page",
     description: "Developed and deployed curated information page to 20,000+ desktops, improving user access to critical tools and resources across the Americas. Enhanced productivity and user experience company-wide.",
-    image: "/api/placeholder/600/400",
+    icon: Layout,
     technologies: ["Deployment", "IT Support", "User Experience", "Scale"],
     featured: false
   },
   {
     title: "Customer-Centric Development",
     description: "Implemented a customer-centric development cycle leveraging user feedback, mockups, and iterative development to deliver measurable customer value in every sprint.",
-    image: "/api/placeholder/600/400",
+    icon: Heart,
     technologies: ["Agile", "UX Design Thinking", "Iterative Development", "Customer Value"],
     featured: false
   }
@@ -85,7 +85,7 @@ export function ProjectsSection() {
               <Card className="h-full glass hover:shadow-xl smooth-transition group overflow-hidden">
                 <div className="relative overflow-hidden">
                   <div className="w-full h-48 bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center">
-                    <span className="text-accent/60 text-sm font-semibold">{project.title}</span>
+                    <project.icon className="w-20 h-20 text-accent/40 group-hover:text-accent/60 smooth-transition group-hover:scale-110" />
                   </div>
                 </div>
                 <CardHeader>
@@ -133,7 +133,12 @@ export function ProjectsSection() {
             >
               <Card className="h-full glass hover:shadow-lg smooth-transition group">
                 <CardHeader>
-                  <CardTitle className="text-lg">{project.title}</CardTitle>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="p-2 rounded-lg bg-accent/10 group-hover:bg-accent/20 smooth-transition">
+                      <project.icon className="w-6 h-6 text-accent" />
+                    </div>
+                    <CardTitle className="text-lg">{project.title}</CardTitle>
+                  </div>
                   <CardDescription className="text-sm">{project.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
