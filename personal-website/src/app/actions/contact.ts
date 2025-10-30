@@ -31,8 +31,9 @@ export async function submitContactForm(data: ContactFormData) {
     // 2. Send notification email to you
     try {
       await resend.emails.send({
-        from: 'Contact Form <onboarding@resend.dev>', // Resend's test email
-        to: 'admin@reggieragsdale.com', // Your email
+        from: 'Contact Form <contact@reggieragsdale.com>',
+        to: 'ReggieD3V@gmail.com',
+        replyTo: data.email, // Allow you to reply directly to the submitter
         subject: `New Contact: ${data.subject}`,
         html: `
           <h2>New Contact Form Submission</h2>
@@ -50,7 +51,7 @@ export async function submitContactForm(data: ContactFormData) {
     // 3. Send auto-reply to submitter
     try {
       await resend.emails.send({
-        from: 'Reggie <onboarding@resend.dev>', // Resend's test email
+        from: 'Reggie Ragsdale <contact@reggieragsdale.com>',
         to: data.email,
         subject: 'Thanks for reaching out!',
         html: `

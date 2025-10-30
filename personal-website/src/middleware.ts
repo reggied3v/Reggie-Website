@@ -27,19 +27,32 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // Refresh session if expired - required for Server Components
-  const { data: { session } } = await supabase.auth.getSession()
-
-  // Protect admin routes
+  // Only check session for admin routes to avoid timeout on public pages
   if (request.nextUrl.pathname.startsWith('/admin') &&
       !request.nextUrl.pathname.startsWith('/admin/login')) {
-    if (!session) {
-      console.log('Middleware: No session found, redirecting to login')
+    try {
+      // Add timeout to prevent gateway timeout
+      const { data: { session } } = await Promise.race([
+        supabase.auth.getSession(),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Session check timeout')), 5000)
+        )
+      ]) as any
+
+      if (!session) {
+        console.log('Middleware: No session found, redirecting to login')
+        const url = request.nextUrl.clone()
+        url.pathname = '/admin/login'
+        return NextResponse.redirect(url)
+      }
+      console.log('Middleware: Session found for:', session.user.email)
+    } catch (error) {
+      console.error('Middleware error:', error)
+      // On error, redirect to login
       const url = request.nextUrl.clone()
       url.pathname = '/admin/login'
       return NextResponse.redirect(url)
     }
-    console.log('Middleware: Session found for:', session.user.email)
   }
 
   return supabaseResponse
